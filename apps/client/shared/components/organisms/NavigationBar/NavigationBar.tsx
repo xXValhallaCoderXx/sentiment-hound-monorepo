@@ -1,4 +1,5 @@
 import React from "react";
+import { useRouter } from "next/router";
 import {
   IconButton,
   Avatar,
@@ -17,6 +18,11 @@ import {
 import { FiChevronDown, FiBell } from "react-icons/fi";
 
 const NavigationBar = () => {
+  const router = useRouter();
+
+  const onClickLink = (e: any) => {
+    router.push(e.target.name);
+  };
   return (
     <HStack spacing={{ base: "0", md: "6" }}>
       <IconButton
@@ -59,7 +65,9 @@ const NavigationBar = () => {
             bg={useColorModeValue("white", "gray.900")}
             borderColor={useColorModeValue("gray.200", "gray.700")}
           >
-            <MenuItem>Profile</MenuItem>
+            <MenuItem onClick={onClickLink} name="/dashboard/profile">
+              Profile
+            </MenuItem>
 
             <MenuDivider />
             <MenuItem>Sign out</MenuItem>

@@ -16,6 +16,7 @@ import { NavItem } from "@client/shared/components/molecules/NavItem";
 interface LinkItemProps {
   name: string;
   icon: IconType;
+  path: string;
 }
 
 interface SidebarProps extends BoxProps {
@@ -23,9 +24,13 @@ interface SidebarProps extends BoxProps {
 }
 
 const LinkItems: Array<LinkItemProps> = [
-  { name: "Dashboard", icon: FiHome },
-  { name: "Analysis", icon: FiTrendingUp },
-  { name: "Overview", icon: FiCompass },
+  { name: "Dashboard", icon: FiHome, path: "/dashboard" },
+  {
+    name: "Analysis",
+    icon: FiTrendingUp,
+    path: "/dashboard/sentiment/analysis",
+  },
+  { name: "Overview", icon: FiCompass, path: "/dashboard/sentiment" },
 ];
 
 const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
@@ -48,7 +53,7 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
         <CloseButton display={{ base: "flex", md: "none" }} onClick={onClose} />
       </Flex>
       {LinkItems.map((link) => (
-        <NavItem key={link.name} icon={link.icon}>
+        <NavItem {...link} key={link.name} icon={link.icon}>
           {link.name}
         </NavItem>
       ))}

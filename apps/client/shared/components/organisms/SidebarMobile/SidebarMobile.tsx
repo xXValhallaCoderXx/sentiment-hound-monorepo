@@ -33,13 +33,11 @@ const SidebarMobile = ({ onOpen, ...rest }: IMobileProps) => {
         icon={<FiMenu />}
       />
 
-      <Text
-        display={{ base: "flex", md: "none" }}
-        fontSize="2xl"
-        fontFamily="monospace"
-        fontWeight="bold"
-      >
-        Logosss
+      <Text display={{ base: "flex", md: "none" }} fontSize="2xl">
+        <span style={{ color: "red", fontWeight: 500, marginRight: 5 }}>
+          Sentiment
+        </span>{" "}
+        Hound
       </Text>
       <NavigationBar />
     </Flex>
