@@ -9,7 +9,7 @@ export class YoutubeService {
     private httpService: HttpService,
   ) {}
   async fetchVideoComments(): Promise<any | null> {
-    const videoId = 'jqhxLejIgX8';
+    const videoId = 'Gk0T_jnV_tw&t';
 
     const YOUTUBE_API_KEY = this.configService.get<string>('YOUTUBE_API_KEY');
 
@@ -23,12 +23,6 @@ export class YoutubeService {
     const videoMetaResponse = await this.httpService.axiosRef.get(
       videoMetaData,
     );
-
-    // const videoComments = await fetch(url);
-    // const videoCommentsResponse = await videoComments.json();
-
-    // const videoDetails = await fetch(videoMetaData);
-    // const videoDetialsResponse = await videoDetails.json();
 
     let count = -1;
     const commentMapping = new Set();
@@ -69,6 +63,6 @@ export class YoutubeService {
       };
     });
 
-    return { comments, flatMap };
+    return { comments, flatMap, contentPost: videoMetaResponse.data.items[0] };
   }
 }
