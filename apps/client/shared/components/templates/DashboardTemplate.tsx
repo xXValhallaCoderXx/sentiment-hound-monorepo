@@ -31,7 +31,7 @@ const DashboardTemplate = ({ children }: any) => {
       </Drawer>
       {/* mobilenav */}
       <SidebarMobile onOpen={onOpen} />
-      <Box ml={{ base: 0, md: 60 }} p="4">
+      <Box ml={{ base: 0, md: 60 }} p="8">
         {children}
       </Box>
     </Box>

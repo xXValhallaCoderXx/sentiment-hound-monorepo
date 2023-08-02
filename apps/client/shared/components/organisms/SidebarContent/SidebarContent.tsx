@@ -7,6 +7,8 @@ import {
   Text,
   BoxProps,
 } from "@chakra-ui/react";
+import Image from "next/image";
+import MainLogo from "@client/public/logos/main-logo.png";
 import { IconType } from "react-icons";
 import { FiHome, FiTrendingUp, FiCompass } from "react-icons/fi";
 import { NavItem } from "@client/shared/components/molecules/NavItem";
@@ -38,9 +40,10 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
       h="full"
       {...rest}
     >
-      <Flex h="20" alignItems="center" mx="8" justifyContent="space-between">
-        <Text fontSize="2xl" fontFamily="monospace" fontWeight="bold">
-          Logo
+      <Flex h={20} alignItems="center" mx="4" justifyContent="space-between">
+        <Image alt="logo" src={MainLogo} height={35} />
+        <Text fontSize="xl">
+          <span style={{ color: "red", fontWeight: 500 }}>Sentiment</span> Hound
         </Text>
         <CloseButton display={{ base: "flex", md: "none" }} onClick={onClose} />
       </Flex>
