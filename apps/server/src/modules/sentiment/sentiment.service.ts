@@ -10,6 +10,21 @@ export class SentimentService {
     private nlpService: NaturalLanguageProcessingService,
   ) {}
   async getAllSentiment(): Promise<any | null> {
+    const getAllContentPostAndResponses =
+      await this.prisma.contentPost.findMany({
+        include: {
+          responses: {
+            include: {
+              aspects: true,
+            },
+          },
+        },
+      });
+
+    return getAllContentPostAndResponses;
+  }
+
+  async analyzeSentiment(): Promise<any | null> {
     const { comments, flatMap, contentPost } =
       await this.youtubeService.fetchVideoComments();
 
@@ -23,9 +38,9 @@ export class SentimentService {
     });
     const storedPostId = storedContentPost.id;
 
-    for (let index = 0; index < res.length; index++) {
-      const element = res[index];
-      console.log('ELEMENT: ', element);
+    for (let index = 0; index < res?.data?.length; index++) {
+      const element = res?.data?.[index];
+
       const storedComment = await this.prisma.response.create({
         data: {
           contentPostId: storedPostId,
@@ -37,17 +52,22 @@ export class SentimentService {
         },
       });
 
-      const commentAspects = await this.prisma.aspect.createMany({
-        data: element.aspects.map((aspect) => ({
-            responseId: storedComment.id,
-            aspect: aspect.aspect,
-            sentiment: aspect.sentiment,
-      })
-    }
-    return 'res';
-  }
+      const aspectArray =
+        Object.entries(element?.aspects).map(([aspect, sentiment]) => ({
+          aspect,
+          sentiment,
+        })) || [];
 
-  async analyzeSentiment(): Promise<any | null> {
-    return await this.prisma.contentPost.findMany();
+      await this.prisma.aspect.createMany({
+        data: aspectArray?.map((aspect: any) => ({
+          responseId: storedComment.id,
+          sentiment: aspect.sentiment,
+          type: aspect.aspect,
+        })),
+      });
+    }
+    return {
+      status: 'success',
+    };
   }
 }
