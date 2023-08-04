@@ -45,10 +45,10 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
       h="full"
       {...rest}
     >
-      <Flex h={20} alignItems="center" mx="4" justifyContent="space-between">
-        <Image alt="logo" src={MainLogo} height={35} />
-        <Text fontSize="xl">
-          <span style={{ color: "red", fontWeight: 500 }}>Sentiment</span> Hound
+      <Flex h={16} alignItems="center" mx="4">
+        <Image alt="logo" src={MainLogo} height={30} />
+        <Text fontSize="xl" fontWeight={500} ml={2}>
+          <span style={{ color: "red", fontWeight: 700 }}>Sentiment</span> Hound
         </Text>
         <CloseButton display={{ base: "flex", md: "none" }} onClick={onClose} />
       </Flex>
