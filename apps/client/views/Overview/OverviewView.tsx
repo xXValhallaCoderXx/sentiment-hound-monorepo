@@ -4,18 +4,17 @@ import TableOverview from "./components/Table";
 
 const OverviewView = () => {
   return (
-    <Box h="calc(100vh - 350px)">
+    <Box overflow="hidden">
       <Card p={4}>
         <Text fontSize="2xl" fontWeight={500}>
           Sentiment Overview
         </Text>
       </Card>
-      <Card mt={4} p={4}>
+      <Card mt={4} p={6}>
         <FilterOverview />
       </Card>
-      <Card mt={4} p={4} h="100%">
-        <TableOverview />
-      </Card>
+
+      <TableOverview />
     </Box>
   );
 };
