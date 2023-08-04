@@ -13,13 +13,14 @@ import {
   Tfoot,
 } from "@chakra-ui/react";
 import {
+  flexRender,
   useReactTable,
   getPaginationRowModel,
   getCoreRowModel,
   getSortedRowModel,
 } from "@tanstack/react-table";
 import { TablePagination } from "@client/shared/components/molecules/TablePagination";
-
+import data from "./fake-data.json";
 import { ColumnDef, createColumnHelper } from "@tanstack/react-table";
 
 interface ITableRow {
@@ -46,7 +47,7 @@ const TableOverview = () => {
   const [sorting, setSorting] = useState<any>([]);
   const table = useReactTable({
     columns: userColumnDefs,
-    data: [],
+    data,
     getCoreRowModel: getCoreRowModel(),
     //2. add getSortedRowModel into the pipeline. this will calculate the sorted rows when the sort state changes
     getSortedRowModel: getSortedRowModel(),
@@ -58,6 +59,10 @@ const TableOverview = () => {
     //4. add a handler for onSortingChange using the setSorting from step 1
     onSortingChange: setSorting,
   });
+
+  const headers = table.getFlatHeaders();
+  const rows = table.getRowModel().rows;
+
   return (
     <Box>
       <Card mt={4} p={4}>
@@ -66,35 +71,55 @@ const TableOverview = () => {
             <TableCaption>Imperial to metric conversion factors</TableCaption>
             <Thead>
               <Tr>
-                <Th>To convert</Th>
-                <Th>into</Th>
-                <Th isNumeric>multiply by</Th>
+                {headers.map((header) => {
+                  const direction = header.column.getIsSorted();
+                  const arrow: any = {
+                    asc: "🔼",
+                    desc: "🔽",
+                  };
+                  const sort_indicator = direction && arrow[direction];
+                  return (
+                    <Th key={header.id}>
+                      {header.isPlaceholder ? null : (
+                        <div
+                          onClick={header.column.getToggleSortingHandler()}
+                          className="cursor-pointer flex gap-4"
+                        >
+                          {flexRender(
+                            header.column.columnDef.header,
+                            header.getContext()
+                          )}
+                          {direction && <span>{sort_indicator}</span>}
+                        </div>
+                      )}
+                    </Th>
+                  );
+                })}
               </Tr>
             </Thead>
             <Tbody>
-              <Tr>
-                <Td>inches</Td>
-                <Td>millimetres (mm)</Td>
-                <Td isNumeric>25.4</Td>
-              </Tr>
-              <Tr>
-                <Td>feet</Td>
-                <Td>centimetres (cm)</Td>
-                <Td isNumeric>30.48</Td>
-              </Tr>
-              <Tr>
-                <Td>yards</Td>
-                <Td>metres (m)</Td>
-                <Td isNumeric>0.91444</Td>
-              </Tr>
+              {rows.map((row) => (
+                <Tr key={row.id}>
+                  {row.getVisibleCells().map((cell, index) => {
+                    return index === 0 ? (
+                      <Th key={cell.id}>
+                        {flexRender(
+                          cell.column.columnDef.cell,
+                          cell.getContext()
+                        )}
+                      </Th>
+                    ) : (
+                      <Td key={cell.id}>
+                        {flexRender(
+                          cell.column.columnDef.cell,
+                          cell.getContext()
+                        )}
+                      </Td>
+                    );
+                  })}
+                </Tr>
+              ))}
             </Tbody>
-            <Tfoot>
-              <Tr>
-                <Th>To convert</Th>
-                <Th>into</Th>
-                <Th isNumeric>multiply by</Th>
-              </Tr>
-            </Tfoot>
           </Table>
         </TableContainer>
       </Card>
