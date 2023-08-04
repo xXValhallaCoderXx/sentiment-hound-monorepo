@@ -1,5 +1,11 @@
+import HeroSection from "./components/HeroSection";
+
 const LandingPageView = () => {
-  return <div>adas</div>;
+  return (
+    <div>
+      <HeroSection />
+    </div>
+  );
 };
 
 export default LandingPageView;
