@@ -9,7 +9,7 @@ export class YoutubeService {
     private httpService: HttpService,
   ) {}
   async fetchVideoComments(): Promise<any | null> {
-    const videoId = 'Gk0T_jnV_tw&t';
+    const videoId = 'nSlodG96u4c';
 
     const YOUTUBE_API_KEY = this.configService.get<string>('YOUTUBE_API_KEY');
 
