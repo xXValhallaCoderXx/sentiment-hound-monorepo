@@ -9,7 +9,7 @@ import { NaturalLanguageProcessingModule } from './modules/natural-language-proc
 import { ConfigModule } from '@nestjs/config';
 import { HttpModule } from '@nestjs/axios';
 import { BullModule } from '@nestjs/bull';
-import { DataFetchingModule } from './modules/data-fetch-queue/data-fetch.module';
+
 
 @Module({
   imports: [
@@ -33,7 +33,7 @@ import { DataFetchingModule } from './modules/data-fetch-queue/data-fetch.module
     NaturalLanguageProcessingModule,
   ],
   controllers: [],
-  providers: [DataFetchingModule],
+  providers: [],
   exports: [BullModule],
 })
 export class AppModule {}

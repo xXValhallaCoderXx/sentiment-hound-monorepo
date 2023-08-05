@@ -1,20 +1,36 @@
-import { Process, Processor, OnQueueActive } from '@nestjs/bull';
+import {
+  Process,
+  Processor,
+  OnQueueActive,
+  OnQueueCompleted,
+} from '@nestjs/bull';
 import { Logger } from '@nestjs/common';
 import { Job } from 'bull';
 import { DATA_FETCHING_QUEUE } from 'apps/server/shared/constants';
+import { YoutubeService } from '../youtube/youtube.service';
 
 @Processor(DATA_FETCHING_QUEUE)
 export class DataFetchingConsumer {
+  constructor(private readonly youtubeService: YoutubeService) {}
   private readonly logger = new Logger(DataFetchingConsumer.name);
   @Process('async-data-fetch')
-  async bulkDataFetch() {
-    this.logger.log('Start fetching data');
+  async bulkDataFetch(job: Job) {
+    this.logger.log('Start fetching datasss', JSON.stringify(job));
+    const x = await this.youtubeService.fetchVideoDetails(job.data);
+    console.log('x ', x);
   }
 
   @OnQueueActive()
   onActive(job: Job) {
     console.log(
       `Processing job ${job.id} of type ${job.name} with data ${job.data}...`,
+    );
+  }
+
+  @OnQueueCompleted()
+  onCompleted(job: Job) {
+    console.log(
+      `Completed job ${job.id} of type ${job.name} with data ${job.data}...`,
     );
   }
 }

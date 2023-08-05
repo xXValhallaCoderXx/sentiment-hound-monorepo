@@ -1,10 +1,12 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger, HttpStatus } from '@nestjs/common';
+
 import { PrismaService } from '../prisma/prisma.service';
 import { YoutubeService } from '../youtube/youtube.service';
 import { NaturalLanguageProcessingService } from '../natural-language-processing/natural-language-processing.service';
 import { DATA_FETCHING_QUEUE } from 'apps/server/shared/constants';
 import { Queue } from 'bull';
 import { InjectQueue } from '@nestjs/bull';
+import { AnalyzeYoutubeVideoSentimentDTO } from './sentiment.dto';
 
 @Injectable()
 export class SentimentService {
@@ -30,12 +32,14 @@ export class SentimentService {
     return getAllContentPostAndResponses;
   }
 
-  async analyzeYoutubeSentiment(): Promise<any | null> {
+  async analyzeYoutubeSentiment(
+    body: AnalyzeYoutubeVideoSentimentDTO,
+  ): Promise<any | null> {
     await this.datafetchQueue.add('async-data-fetch', {
-      url: 'http://',
+      videoId: body.videoId,
     });
 
-    return '';
+    return { status: 'ok' };
   }
 
   async analyzeSentiment(): Promise<any | null> {
