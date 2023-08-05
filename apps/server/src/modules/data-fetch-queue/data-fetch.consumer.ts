@@ -6,7 +6,7 @@ import { DATA_FETCHING_QUEUE } from 'apps/server/shared/constants';
 @Processor(DATA_FETCHING_QUEUE)
 export class DataFetchingConsumer {
   private readonly logger = new Logger(DataFetchingConsumer.name);
-  @Process()
+  @Process('async-data-fetch')
   async bulkDataFetch() {
     this.logger.log('Start fetching data');
   }

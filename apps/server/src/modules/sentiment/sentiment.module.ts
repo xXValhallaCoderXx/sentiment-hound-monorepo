@@ -6,7 +6,7 @@ import { YoutubeModule } from '../youtube/youtube.module';
 import { NaturalLanguageProcessingModule } from '../natural-language-processing/natural-language-processing.module';
 import { BullModule } from '@nestjs/bull';
 import { DATA_FETCHING_QUEUE } from 'apps/server/shared/constants';
-
+import { DataFetchingConsumer } from '../data-fetch-queue/data-fetch.consumer';
 @Module({
   imports: [
     PrismaModule,
@@ -17,6 +17,6 @@ import { DATA_FETCHING_QUEUE } from 'apps/server/shared/constants';
     }),
   ],
   controllers: [SentimentController],
-  providers: [SentimentService],
+  providers: [SentimentService, DataFetchingConsumer],
 })
 export class SentimentModule {}

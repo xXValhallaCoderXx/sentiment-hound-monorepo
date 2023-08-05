@@ -31,7 +31,7 @@ export class SentimentService {
   }
 
   async analyzeYoutubeSentiment(): Promise<any | null> {
-    await this.datafetchQueue.add({
+    await this.datafetchQueue.add('async-data-fetch', {
       url: 'http://',
     });
 
