@@ -31,6 +31,7 @@ const LinkItems: Array<LinkItemProps> = [
     path: "/dashboard/sentiment/analysis",
   },
   { name: "Overview", icon: FiCompass, path: "/dashboard/sentiment" },
+  { name: "Tasks", icon: FiCompass, path: "/dashboard/tasks" },
 ];
 
 const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
