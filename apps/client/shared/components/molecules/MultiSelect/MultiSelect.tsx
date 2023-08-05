@@ -14,6 +14,7 @@ import {
   IconButton,
 } from "@chakra-ui/react";
 import { FaCaretDown, FaFilter, FaCandyCane } from "react-icons/fa";
+import { GrFormClose } from "react-icons/gr";
 
 interface IMultiSelectProps {
   title: string;
@@ -48,7 +49,7 @@ const MultiSelect: React.FC<IMultiSelectProps> = ({
         <Menu closeOnSelect={false}>
           <MenuButton
             as={Button}
-            colorScheme="blue"
+            colorScheme="black"
             variant={"outline"}
             rightIcon={<Icon as={FaCaretDown} />}
             maxW={"2xs"}
@@ -56,7 +57,7 @@ const MultiSelect: React.FC<IMultiSelectProps> = ({
             <Flex align="center" gap="2">
               <Text noOfLines={1}>{title}</Text>
 
-              <Badge bg="blue.600" color="white">
+              <Badge bg="primary" color="white">
                 {selectedOptions.length}
               </Badge>
             </Flex>
@@ -79,7 +80,7 @@ const MultiSelect: React.FC<IMultiSelectProps> = ({
                     <Button
                       size="xs"
                       variant="link"
-                      colorScheme="blue"
+                      colorScheme="black"
                       onClick={() => handleOptionSelect(options)}
                     >
                       Select All
@@ -88,7 +89,7 @@ const MultiSelect: React.FC<IMultiSelectProps> = ({
                     <Button
                       size="xs"
                       variant="link"
-                      colorScheme="blue"
+                      colorScheme="red"
                       onClick={handleClear}
                     >
                       Clear
@@ -103,8 +104,8 @@ const MultiSelect: React.FC<IMultiSelectProps> = ({
                 <MenuItemOption
                   key={option}
                   value={option}
-                  _focus={{ bg: "yellow.100" }}
-                  _hover={{ bg: "yellow.100" }}
+                  _focus={{ bg: "red.100" }}
+                  _hover={{ bg: "red.100" }}
                   transition={"background 0.3s ease"}
                 >
                   {option}
@@ -118,9 +119,9 @@ const MultiSelect: React.FC<IMultiSelectProps> = ({
           <IconButton
             aria-label="Clear"
             size="xs"
-            colorScheme="blue"
+            colorScheme="red"
             rounded={"full"}
-            icon={<Icon as={FaCandyCane} />}
+            icon={<Icon as={GrFormClose} fontSize={15} />}
             ml="-8"
             mt="-8"
             onClick={handleClear}

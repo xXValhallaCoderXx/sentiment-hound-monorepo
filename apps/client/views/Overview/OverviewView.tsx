@@ -1,6 +1,17 @@
-import { Card, Box, Heading, Text } from "@chakra-ui/react";
+import {
+  Card,
+  Box,
+  Heading,
+  Text,
+  Tabs,
+  TabList,
+  Tab,
+  TabPanels,
+  TabPanel,
+} from "@chakra-ui/react";
 import FilterOverview from "./components/Filter";
 import TableOverview from "./components/Table";
+import GraphView from "./GraphView";
 
 const OverviewView = () => {
   return (
@@ -14,7 +25,21 @@ const OverviewView = () => {
         <FilterOverview />
       </Card>
 
-      <TableOverview />
+      <Tabs sx={{ mt: 6 }}>
+        <TabList>
+          <Tab>Grid</Tab>
+          <Tab>Graphs</Tab>
+        </TabList>
+
+        <TabPanels>
+          <TabPanel>
+            <TableOverview />
+          </TabPanel>
+          <TabPanel>
+            <GraphView />
+          </TabPanel>
+        </TabPanels>
+      </Tabs>
     </Box>
   );
 };

@@ -14,19 +14,15 @@ const FilterOverview = () => {
         <Text fontSize="sm" mb={1}>
           Platform
         </Text>
+        <MultiSelect title="Platforms" options={["Youtube", "Twitter"]} />
+      </Box>
+      <Box maxW="200px">
+        <Text fontSize="sm" mb={1}>
+          Sentiment
+        </Text>
         <MultiSelect
-          title="Technologies"
-          options={[
-            "Chakra-UI",
-            "React",
-            "Vite",
-            "TypeScript",
-            "Next.js",
-            "TailwindCSS",
-            "React Query",
-            "React Hook Form",
-            "React Router",
-          ]}
+          title="Sentiment"
+          options={["Positive", "Negative", "Neutral"]}
         />
       </Box>
       <Box maxW="200px">
@@ -34,39 +30,11 @@ const FilterOverview = () => {
           Aspects
         </Text>
         <MultiSelect
-          title="Technologies"
-          options={[
-            "Chakra-UI",
-            "React",
-            "Vite",
-            "TypeScript",
-            "Next.js",
-            "TailwindCSS",
-            "React Query",
-            "React Hook Form",
-            "React Router",
-          ]}
+          title="Aspects"
+          options={["Gameplay", "Lag", "Weapon Handling"]}
         />
       </Box>
-      <Box maxW="200px">
-        <Text fontSize="sm" mb={1}>
-          Sentiment
-        </Text>
-        <MultiSelect
-          title="Technologies"
-          options={[
-            "Chakra-UI",
-            "React",
-            "Vite",
-            "TypeScript",
-            "Next.js",
-            "TailwindCSS",
-            "React Query",
-            "React Hook Form",
-            "React Router",
-          ]}
-        />
-      </Box>
+
       <Box>
         <Text fontSize="sm" mb={1}>
           Date Range
