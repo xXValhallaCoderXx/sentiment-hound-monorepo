@@ -9,7 +9,7 @@ import { NaturalLanguageProcessingModule } from './modules/natural-language-proc
 import { ConfigModule } from '@nestjs/config';
 import { HttpModule } from '@nestjs/axios';
 import { BullModule } from '@nestjs/bull';
-
+import { TaskModule } from './modules/task/task.module';
 
 @Module({
   imports: [
@@ -31,6 +31,7 @@ import { BullModule } from '@nestjs/bull';
     AspectModule,
     YoutubeModule,
     NaturalLanguageProcessingModule,
+    TaskModule,
   ],
   controllers: [],
   providers: [],

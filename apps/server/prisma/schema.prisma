@@ -11,9 +11,10 @@ datasource db {
 }
 
 model Task {
-  id          String    @id @default(cuid())
-  status      String
-  contentPost ContentPost?
+  id              String    @id @default(cuid())
+  status          String
+  contentPost     ContentPost @relation(fields: [contentPostId], references: [id])
+  contentPostId   String  @unique
 }
 
 model ContentPost {
@@ -22,8 +23,7 @@ model ContentPost {
   contentId     String
   author        String? 
   responses     Response[]
-  task          Task @relation(fields: [taskId], references: [id])
-  taskId        String  @unique
+  task          Task?
 }
 
 model Response {

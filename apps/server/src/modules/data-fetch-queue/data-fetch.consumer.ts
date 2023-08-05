@@ -8,10 +8,14 @@ import { Logger } from '@nestjs/common';
 import { Job } from 'bull';
 import { DATA_FETCHING_QUEUE } from 'apps/server/shared/constants';
 import { YoutubeService } from '../youtube/youtube.service';
+import { TaskRepository } from '../task/task.repository';
 
 @Processor(DATA_FETCHING_QUEUE)
 export class DataFetchingConsumer {
-  constructor(private readonly youtubeService: YoutubeService) {}
+  constructor(
+    private readonly youtubeService: YoutubeService,
+    private readonly taskRepository: TaskRepository,
+  ) {}
   private readonly logger = new Logger(DataFetchingConsumer.name);
   @Process('async-data-fetch')
   async bulkDataFetch(job: Job) {

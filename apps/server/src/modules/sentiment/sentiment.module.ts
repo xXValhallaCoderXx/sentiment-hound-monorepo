@@ -7,10 +7,12 @@ import { NaturalLanguageProcessingModule } from '../natural-language-processing/
 import { BullModule } from '@nestjs/bull';
 import { DATA_FETCHING_QUEUE } from 'apps/server/shared/constants';
 import { DataFetchingConsumer } from '../data-fetch-queue/data-fetch.consumer';
+import { TaskModule } from '../task/task.module';
 @Module({
   imports: [
     PrismaModule,
     YoutubeModule,
+    TaskModule,
     NaturalLanguageProcessingModule,
     BullModule.registerQueue({
       name: DATA_FETCHING_QUEUE,
