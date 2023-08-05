@@ -4,8 +4,18 @@ import { SentimentService } from './sentiment.service';
 import { PrismaModule } from '../prisma/prisma.module';
 import { YoutubeModule } from '../youtube/youtube.module';
 import { NaturalLanguageProcessingModule } from '../natural-language-processing/natural-language-processing.module';
+import { BullModule } from '@nestjs/bull';
+import { DATA_FETCHING_QUEUE } from 'apps/server/shared/constants';
+
 @Module({
-  imports: [PrismaModule, YoutubeModule, NaturalLanguageProcessingModule],
+  imports: [
+    PrismaModule,
+    YoutubeModule,
+    NaturalLanguageProcessingModule,
+    BullModule.registerQueue({
+      name: DATA_FETCHING_QUEUE,
+    }),
+  ],
   controllers: [SentimentController],
   providers: [SentimentService],
 })

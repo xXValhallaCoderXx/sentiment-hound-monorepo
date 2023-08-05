@@ -1,14 +1,20 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { YoutubeService } from '../youtube/youtube.service';
 import { NaturalLanguageProcessingService } from '../natural-language-processing/natural-language-processing.service';
+import { DATA_FETCHING_QUEUE } from 'apps/server/shared/constants';
+import { Queue } from 'bull';
+import { InjectQueue } from '@nestjs/bull';
+
 @Injectable()
 export class SentimentService {
   constructor(
     private prisma: PrismaService,
     private youtubeService: YoutubeService,
     private nlpService: NaturalLanguageProcessingService,
+    @InjectQueue(DATA_FETCHING_QUEUE) private readonly datafetchQueue: Queue,
   ) {}
+  private readonly logger = new Logger(SentimentService.name);
   async getAllSentiment(): Promise<any | null> {
     const getAllContentPostAndResponses =
       await this.prisma.contentPost.findMany({
@@ -22,6 +28,14 @@ export class SentimentService {
       });
 
     return getAllContentPostAndResponses;
+  }
+
+  async analyzeYoutubeSentiment(): Promise<any | null> {
+    await this.datafetchQueue.add({
+      url: 'http://',
+    });
+
+    return '';
   }
 
   async analyzeSentiment(): Promise<any | null> {
