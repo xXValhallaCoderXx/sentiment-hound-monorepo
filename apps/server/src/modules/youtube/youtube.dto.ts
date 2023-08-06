@@ -1,9 +1,19 @@
-import { IsNotEmpty, IsString, IsDate } from 'class-validator';
+import {
+  IsNotEmpty,
+  IsString,
+  IsDate,
+  IsNumber,
+  IsOptional,
+} from 'class-validator';
 
 export class FetchVideoCommentDTO {
   @IsNotEmpty()
   @IsString()
   videoId: string;
+
+  @IsOptional()
+  @IsNumber()
+  size?: number;
 }
 
 export class VideoDetailDTO {

@@ -10,4 +10,9 @@ export class TaskRepository {
     const { data } = params;
     return this.prisma.task.create({ data });
   }
+
+  // async createTaskAssignContentPost(params: { data: Prisma.TaskCreateInput }): Promise<Task> {
+  //   const { data } = params;
+  //   return this.prisma.task.create({ data });
+  // }
 }

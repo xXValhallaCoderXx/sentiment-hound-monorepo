@@ -21,18 +21,38 @@ export class DataFetchingConsumer {
   private readonly logger = new Logger(DataFetchingConsumer.name);
   @Process('async-data-fetch')
   async bulkDataFetch(job: Job) {
-    this.logger.log('Start fetching datasss', JSON.stringify(job));
+    this.logger.log('Data Fetching Task Creating');
     const youtubeDetails = await this.youtubeService.fetchVideoDetails(
       job.data,
     );
-    const x = await this.contentPostRepository.createContentPost({
+    const contentPost = await this.contentPostRepository.createContentPost({
       data: {
         contentId: youtubeDetails.id,
         platform: 'youtube',
         author: youtubeDetails.author,
       },
     });
-    console.log('x ', x);
+    console.log('CONTENT POST CREATED');
+    const createdTask = await this.taskRepository.createTask({
+      data: {
+        contentPost: {
+          connect: contentPost,
+        },
+        status: 'processing',
+        id: contentPost.id,
+      },
+    });
+    console.log('TASK CREATED: ', createdTask);
+
+    this.logger.log('Fetching Comments');
+    const x = await this.youtubeService.fetchAllVideoComments({
+      videoId: job?.data.videoId,
+    });
+
+    const parseComments = x.items.map((comment: any) => {
+      console.log('COMMENT: ', comment);
+      return comment;
+    });
   }
 
   @OnQueueActive()

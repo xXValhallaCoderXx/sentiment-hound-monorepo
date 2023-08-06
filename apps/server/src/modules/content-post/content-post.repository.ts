@@ -8,9 +8,11 @@ export class ContentPostRepository {
   constructor(private prisma: PrismaService) {}
 
   async createContentPost(params: {
-    data: Prisma.ContentPostCreateInput;
+    data: Prisma.ContentPostUncheckedCreateWithoutResponsesInput;
   }): Promise<ContentPost> {
     const { data } = params;
-    return this.prisma.contentPost.create({ data });
+    return await this.prisma.contentPost.create({
+      data,
+    });
   }
 }

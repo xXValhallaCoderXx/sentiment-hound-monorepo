@@ -3,6 +3,15 @@ import { ConfigService } from '@nestjs/config';
 import { HttpService } from '@nestjs/axios';
 import { FetchVideoCommentDTO, VideoDetailDTO } from './youtube.dto';
 
+interface IFetchAllComentsResponse {
+  data: {
+    kind: string;
+    etag: string;
+    pageInfo: { totalResults: number; resultsPerPage: number };
+    items: string[];
+  };
+}
+
 @Injectable()
 export class YoutubeService {
   constructor(
@@ -15,15 +24,16 @@ export class YoutubeService {
     const YOUTUBE_API_KEY = this.configService.get<string>('YOUTUBE_API_KEY');
     const API_URL = this.configService.get<string>('YOUTUBE_BASE_API');
 
-    const url = `${API_URL}/commentThreads?key=${YOUTUBE_API_KEY}&maxResults=100&part=snippet,replies&videoId=${videoId}`;
-    const videoMetaData = `${API_URL}/videos?key=${YOUTUBE_API_KEY}&part=snippet&id=${videoId}`;
+    const url = `${API_URL}/commentThreads?key=${YOUTUBE_API_KEY}&maxResults=${
+      data.size ?? 100
+    }&part=snippet,replies&videoId=${videoId}`;
 
-    // const videoCommentsResponse = await this.httpService.axiosRef.get(url);
-    const videoMetaResponse = await this.httpService.axiosRef.get(
-      videoMetaData,
-    );
-    // console.log('VIDEO META: ', videoMetaResponse.data?.items);
-    return 'hello';
+    const videoCommentsResponse = await this.httpService.axiosRef.get<
+      any,
+      IFetchAllComentsResponse
+    >(url);
+
+    return videoCommentsResponse.data;
   }
 
   async fetchVideoDetails(data: FetchVideoCommentDTO): Promise<VideoDetailDTO> {
@@ -31,13 +41,10 @@ export class YoutubeService {
     const YOUTUBE_API_KEY = this.configService.get<string>('YOUTUBE_API_KEY');
     const API_URL = this.configService.get<string>('YOUTUBE_BASE_API');
     const videoMetaData = `${API_URL}/videos?key=${YOUTUBE_API_KEY}&part=snippet&id=${videoId}`;
-
-    // const videoCommentsResponse = await this.httpService.axiosRef.get(url);
     const videoMetaResponse = await this.httpService.axiosRef.get(
       videoMetaData,
     );
     const videoDetails = videoMetaResponse.data?.items[0];
-    console.log('VIDEO META: ', videoDetails.snippet?.thumbnails);
     return {
       id: videoDetails?.id,
       title: videoDetails?.snippet?.title,
