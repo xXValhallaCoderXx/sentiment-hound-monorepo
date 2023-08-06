@@ -22,7 +22,7 @@ export class YoutubeService {
     const videoMetaResponse = await this.httpService.axiosRef.get(
       videoMetaData,
     );
-    console.log('VIDEO META: ', videoMetaResponse.data?.items);
+    // console.log('VIDEO META: ', videoMetaResponse.data?.items);
     return 'hello';
   }
 

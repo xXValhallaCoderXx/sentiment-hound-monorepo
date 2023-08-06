@@ -8,11 +8,13 @@ import { BullModule } from '@nestjs/bull';
 import { DATA_FETCHING_QUEUE } from 'apps/server/shared/constants';
 import { DataFetchingConsumer } from '../data-fetch-queue/data-fetch.consumer';
 import { TaskModule } from '../task/task.module';
+import { ContentPostModule } from '../content-post/content-post.module';
 @Module({
   imports: [
     PrismaModule,
     YoutubeModule,
     TaskModule,
+    ContentPostModule,
     NaturalLanguageProcessingModule,
     BullModule.registerQueue({
       name: DATA_FETCHING_QUEUE,
