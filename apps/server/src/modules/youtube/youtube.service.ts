@@ -32,6 +32,7 @@ export class YoutubeService {
       any,
       IFetchAllComentsResponse
     >(url);
+    console.log('WHAT IS THIS');
 
     return videoCommentsResponse.data;
   }

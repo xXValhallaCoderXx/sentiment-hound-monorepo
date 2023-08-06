@@ -11,6 +11,24 @@ import { YoutubeService } from '../youtube/youtube.service';
 import { TaskRepository } from '../task/task.repository';
 import { ContentPostRepository } from '../content-post/content-post.repository';
 
+interface IComment {
+  kind: string;
+  etag: string;
+  id: string;
+  snippet: {
+    videoId: string;
+    topLevelComment: {
+      kind: string;
+      etag: string;
+      id: string;
+      snippet: any;
+    };
+    canReply: boolean;
+    totalReplyCount: number;
+    isPublic: boolean;
+  };
+}
+
 @Processor(DATA_FETCHING_QUEUE)
 export class DataFetchingConsumer {
   constructor(
@@ -21,7 +39,7 @@ export class DataFetchingConsumer {
   private readonly logger = new Logger(DataFetchingConsumer.name);
   @Process('async-data-fetch')
   async bulkDataFetch(job: Job) {
-    this.logger.log('Data Fetching Task Creating');
+    this.logger.log('Data Fetching Task Started');
     const youtubeDetails = await this.youtubeService.fetchVideoDetails(
       job.data,
     );
@@ -32,27 +50,50 @@ export class DataFetchingConsumer {
         author: youtubeDetails.author,
       },
     });
-    console.log('CONTENT POST CREATED');
     const createdTask = await this.taskRepository.createTask({
       data: {
         contentPost: {
           connect: contentPost,
         },
-        status: 'processing',
+        status: 'fetching-comments',
         id: contentPost.id,
       },
     });
-    console.log('TASK CREATED: ', createdTask);
 
-    this.logger.log('Fetching Comments');
-    const x = await this.youtubeService.fetchAllVideoComments({
+    const comments = await this.youtubeService.fetchAllVideoComments({
       videoId: job?.data.videoId,
     });
 
-    const parseComments = x.items.map((comment: any) => {
-      console.log('COMMENT: ', comment);
-      return comment;
+    const flatMap: any = [];
+
+    comments?.items?.forEach((comment: any) => {
+      flatMap.push({
+        id: comment.id,
+        repliesCount: comment?.snippet?.totalReplyCount ?? 0,
+        videoId: comment?.snippet?.videoId,
+        comment: comment.snippet.textOriginal,
+        author: comment.snippet.authorDisplayName,
+        likes: comment.snippet.likeCount,
+        updatedAt: comment.snippet.updatedAt,
+        publishedAt: comment.snippet.publishedAt,
+      });
+
+      if (comment?.replies?.comments?.length > 0) {
+        comment?.replies?.comments.forEach((reply: any) => {
+          flatMap.push({
+            id: reply.id,
+            parentId: reply?.snippet?.parentId,
+            likes: reply?.snippet?.likeCount ?? 0,
+            videoId: reply?.snippet?.videoId,
+            comment: reply?.snippet.textOriginal,
+            author: reply?.snippet.authorDisplayName,
+            updatedAt: reply?.snippet.updatedAt,
+            publishedAt: reply?.snippet.publishedAt,
+          });
+        });
+      }
     });
+    this.logger.log('Data Fetching Task Completed');
   }
 
   @OnQueueActive()
