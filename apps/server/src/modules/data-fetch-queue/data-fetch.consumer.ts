@@ -1,12 +1,17 @@
 import {
   Process,
   Processor,
+  InjectQueue,
   OnQueueActive,
   OnQueueCompleted,
 } from '@nestjs/bull';
 import { Logger } from '@nestjs/common';
 import { Job } from 'bull';
-import { DATA_FETCHING_QUEUE } from 'apps/server/shared/constants';
+import { Queue } from 'bull';
+import {
+  DATA_FETCHING_QUEUE,
+  NLP_PROCESSING_QUEUE,
+} from 'apps/server/shared/constants';
 import { YoutubeService } from '../youtube/youtube.service';
 import { TaskRepository } from '../task/task.repository';
 import { ContentPostRepository } from '../content-post/content-post.repository';
@@ -37,6 +42,7 @@ export class DataFetchingConsumer {
     private readonly taskRepository: TaskRepository,
     private readonly contentPostRepository: ContentPostRepository,
     private readonly responseRepository: ResponseRepository,
+    @InjectQueue(NLP_PROCESSING_QUEUE) private readonly nlpProcessQueue: Queue,
   ) {}
   private readonly logger = new Logger(DataFetchingConsumer.name);
   @Process('async-data-fetch')
@@ -138,9 +144,12 @@ export class DataFetchingConsumer {
   }
 
   @OnQueueCompleted()
-  onCompleted(job: Job) {
+  async onCompleted(job: Job) {
     console.log(
       `Completed job ${job.id} of type ${job.name} with data ${job.data}...`,
     );
+    await this.nlpProcessQueue.add('async-sentiment-process', {
+      taskProcess: 'lallala',
+    });
   }
 }
