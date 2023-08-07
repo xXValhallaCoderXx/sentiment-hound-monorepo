@@ -62,6 +62,7 @@ export class SentimentService {
       const storedComment = await this.prisma.response.create({
         data: {
           contentPostId: storedPostId,
+          remoteId: element.id ?? '',
           sentiment: element.sentiment,
           platform: 'youtube',
           author: element.author,

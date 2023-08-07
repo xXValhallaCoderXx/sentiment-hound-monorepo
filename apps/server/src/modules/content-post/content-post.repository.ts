@@ -15,4 +15,21 @@ export class ContentPostRepository {
       data,
     });
   }
+
+  async updateContentPost(params: {
+    where: Prisma.ContentPostWhereUniqueInput;
+    data: Prisma.ContentPostUpdateInput;
+  }): Promise<ContentPost> {
+    const { where, data } = params;
+    console.log('WHAEEEERE: ', where);
+    try {
+      return await this.prisma.contentPost.update({
+        where,
+        data,
+      });
+    } catch (err) {
+      console.log('ERROR: ', err);
+      throw new Error(err);
+    }
+  }
 }

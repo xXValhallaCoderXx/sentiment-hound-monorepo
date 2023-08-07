@@ -10,6 +10,7 @@ import { DATA_FETCHING_QUEUE } from 'apps/server/shared/constants';
 import { YoutubeService } from '../youtube/youtube.service';
 import { TaskRepository } from '../task/task.repository';
 import { ContentPostRepository } from '../content-post/content-post.repository';
+import { ResponseRepository } from '../response/response.repository';
 
 interface IComment {
   kind: string;
@@ -35,6 +36,7 @@ export class DataFetchingConsumer {
     private readonly youtubeService: YoutubeService,
     private readonly taskRepository: TaskRepository,
     private readonly contentPostRepository: ContentPostRepository,
+    private readonly responseRepository: ResponseRepository,
   ) {}
   private readonly logger = new Logger(DataFetchingConsumer.name);
   @Process('async-data-fetch')
@@ -50,7 +52,7 @@ export class DataFetchingConsumer {
         author: youtubeDetails.author,
       },
     });
-    const createdTask = await this.taskRepository.createTask({
+    const newTask = await this.taskRepository.createTask({
       data: {
         contentPost: {
           connect: contentPost,
@@ -64,36 +66,68 @@ export class DataFetchingConsumer {
       videoId: job?.data.videoId,
     });
 
+    this.logger.log('Data Fetching Task Completed');
+
     const flatMap: any = [];
 
     comments?.items?.forEach((comment: any) => {
       flatMap.push({
-        id: comment.id,
-        repliesCount: comment?.snippet?.totalReplyCount ?? 0,
-        videoId: comment?.snippet?.videoId,
-        comment: comment.snippet.textOriginal,
-        author: comment.snippet.authorDisplayName,
-        likes: comment.snippet.likeCount,
-        updatedAt: comment.snippet.updatedAt,
-        publishedAt: comment.snippet.publishedAt,
+        // repliesCount: comment?.snippet?.totalReplyCount ?? 0,
+        // videoId: comment?.snippet?.videoId,
+        remoteId: comment.id,
+        platform: 'youtube',
+        content: comment.snippet?.topLevelComment?.snippet?.textOriginal,
+        author: comment.snippet?.topLevelComment?.snippet?.authorDisplayName,
+        likes:
+          Number(comment.snippet?.topLevelComment?.snippet?.likeCount) ?? 0,
+        // updatedAt: comment.snippet?.topLevelComment?.snippet?.updatedAt,
+        publishedAt:
+          comment.snippet?.topLevelComment?.snippet?.publishedAt ?? '',
       });
 
       if (comment?.replies?.comments?.length > 0) {
         comment?.replies?.comments.forEach((reply: any) => {
           flatMap.push({
-            id: reply.id,
             parentId: reply?.snippet?.parentId,
-            likes: reply?.snippet?.likeCount ?? 0,
-            videoId: reply?.snippet?.videoId,
-            comment: reply?.snippet.textOriginal,
+            remoteId: reply.id,
+            likes: Number(reply?.snippet?.likeCount) ?? 0,
+            // videoId: reply?.snippet?.videoId,
+            content: reply?.snippet.textOriginal,
+            platform: 'youtube',
             author: reply?.snippet.authorDisplayName,
-            updatedAt: reply?.snippet.updatedAt,
-            publishedAt: reply?.snippet.publishedAt,
+            // updatedAt: reply?.snippet.updatedAt,
+            publishedAt: reply?.snippet.publishedAt ?? '',
           });
         });
       }
     });
-    this.logger.log('Data Fetching Task Completed');
+
+    this.logger.log('Comment data parsed');
+
+    this.logger.log('Comment data saving');
+    await this.contentPostRepository.updateContentPost({
+      where: {
+        id: contentPost.id,
+      },
+      data: {
+        responses: {
+          createMany: {
+            data: flatMap,
+          },
+        },
+      },
+    });
+
+    await this.taskRepository.updateTask({
+      where: {
+        id: newTask.id,
+      },
+      data: {
+        status: 'pending-sentiment',
+      },
+    });
+
+    this.logger.log('Comment data saved');
   }
 
   @OnQueueActive()
