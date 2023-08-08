@@ -1,10 +1,12 @@
 import { Card, Box, Text } from "@chakra-ui/react";
 import { EmptyData } from "@client/shared/components/molecules/EmptyData";
 import { useAppSelector } from "@client/shared/lib/store";
+import { useGetTasksQuery } from "@client/shared/slices/tasks/tasks.api";
 const TaskViews = () => {
-  const x = useAppSelector((state) => state.comments);
+  const x = useAppSelector((state) => state.tasks);
+  const { data: tasks, isLoading } = useGetTasksQuery({});
 
-  console.log("X: ", x);
+  console.log("X: ", tasks);
   const data = [];
   return (
     <Box>
