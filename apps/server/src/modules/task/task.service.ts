@@ -51,6 +51,9 @@ export class TaskService {
       {
         where,
         orderBy,
+        include: {
+          contentPost: true,
+        },
       },
       {
         page: page ?? 1,

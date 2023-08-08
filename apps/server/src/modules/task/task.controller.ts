@@ -25,7 +25,7 @@ export class TaskController {
       page,
       pageSize,
       // orderBy: { status: 'asc' },
-      where: { status: 'completed' },
+      // where: { status: 'completed' },
     });
   }
 

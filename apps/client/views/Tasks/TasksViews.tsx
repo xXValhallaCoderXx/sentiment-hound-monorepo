@@ -1,13 +1,26 @@
 import { Card, Box, Text } from "@chakra-ui/react";
 import { EmptyData } from "@client/shared/components/molecules/EmptyData";
-import { useAppSelector } from "@client/shared/lib/store";
-import { useGetTasksQuery } from "@client/shared/slices/tasks/tasks.api";
-const TaskViews = () => {
-  const x = useAppSelector((state) => state.tasks);
-  const { data: tasks, isLoading } = useGetTasksQuery({});
 
-  console.log("X: ", tasks);
-  const data = [];
+import { useGetTasksQuery } from "@client/shared/slices/tasks/tasks.api";
+import { useMemo } from "react";
+import TaskTable from "./components/TaskTable";
+
+const TaskViews = () => {
+  const { data: tasks, isLoading } = useGetTasksQuery(
+    {},
+    { pollingInterval: 3000 }
+  );
+
+  const parsedTasks = useMemo(() => {
+    const filteredTasks = tasks?.data
+      ?.filter((task: any) => task.status !== "completed")
+      .map((task: any) => ({
+        status: task.status,
+        platform: task.contentPost?.platform,
+      }));
+    return filteredTasks;
+  }, [tasks]);
+  console.log(parsedTasks);
   return (
     <Box>
       <Card p={4}>
@@ -17,7 +30,9 @@ const TaskViews = () => {
         </Text>
       </Card>
       <Card mt={5}>
-        {data.length === 0 ? (
+        {isLoading ? (
+          <div>Loading</div>
+        ) : parsedTasks.length === 0 ? (
           <Box height={500} display="flex" justifyContent="center">
             <EmptyData
               title="No Running Tasks"
@@ -25,7 +40,9 @@ const TaskViews = () => {
             />
           </Box>
         ) : (
-          <div>sdsd</div>
+          <div>
+            <TaskTable data={parsedTasks} />
+          </div>
         )}
       </Card>
     </Box>
