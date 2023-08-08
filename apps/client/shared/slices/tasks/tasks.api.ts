@@ -6,6 +6,10 @@ const taskApi = rootApi.injectEndpoints({
       query: () => ({
         url: "/task",
         method: "GET",
+        params: {
+          page: 1,
+          pageSize: 10,
+        },
       }),
       providesTags: ["tasks"],
     }),

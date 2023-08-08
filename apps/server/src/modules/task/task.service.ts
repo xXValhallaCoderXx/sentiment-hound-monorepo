@@ -1,5 +1,11 @@
 import { Injectable, Logger, HttpStatus } from '@nestjs/common';
-import { Task } from '.prisma/client';
+import { Task, Prisma } from '.prisma/client';
+
+import {
+  paginator,
+  PaginatedResult,
+  PaginateFunction,
+} from '../prisma/prisma.paginator';
 import { PrismaService } from '../prisma/prisma.service';
 import { TaskRepository } from './task.repository';
 
@@ -28,12 +34,27 @@ export class TaskService {
     }
   }
 
-  async getAllTasks(): Promise<Task[]> {
-    try {
-      const tasks = await this.prisma.task.findMany();
-      return tasks;
-    } catch (err) {
-      throw new Error(err);
-    }
+  async findMany({
+    where,
+    orderBy,
+    page,
+    pageSize,
+  }: {
+    where?: Prisma.TaskWhereInput;
+    orderBy?: Prisma.TaskOrderByWithRelationInput;
+    page?: number;
+    pageSize?: number;
+  }): Promise<PaginatedResult<Task>> {
+    const paginate: PaginateFunction = paginator({ perPage: pageSize ?? 5 });
+    return paginate(
+      this.prisma.task,
+      {
+        where,
+        orderBy,
+      },
+      {
+        page: page ?? 1,
+      },
+    );
   }
 }
