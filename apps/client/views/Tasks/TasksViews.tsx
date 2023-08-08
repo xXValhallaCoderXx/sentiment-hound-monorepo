@@ -1,7 +1,10 @@
 import { Card, Box, Text } from "@chakra-ui/react";
 import { EmptyData } from "@client/shared/components/molecules/EmptyData";
-
+import { useAppSelector } from "@client/shared/lib/store";
 const TaskViews = () => {
+  const x = useAppSelector((state) => state.comments);
+
+  console.log("X: ", x);
   const data = [];
   return (
     <Box>
