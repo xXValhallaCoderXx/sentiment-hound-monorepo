@@ -51,6 +51,7 @@ export class DataFetchingConsumer {
     const youtubeDetails = await this.youtubeService.fetchVideoDetails(
       job.data,
     );
+
     const contentPost = await this.contentPostRepository.createContentPost({
       data: {
         contentId: youtubeDetails.id,
@@ -58,6 +59,7 @@ export class DataFetchingConsumer {
         author: youtubeDetails.author,
       },
     });
+
     const newTask = await this.taskRepository.createTask({
       data: {
         contentPost: {
@@ -68,7 +70,7 @@ export class DataFetchingConsumer {
       },
     });
 
-    const comments = await this.youtubeService.fetchAllVideoComments({
+    const comments = await this.youtubeService.fetchAllVideoComments2({
       videoId: job?.data.videoId,
     });
 
@@ -76,32 +78,31 @@ export class DataFetchingConsumer {
 
     const flatMap: any = [];
 
-    comments?.items?.forEach((comment: any) => {
+    comments?.forEach((comment: any) => {
       flatMap.push({
         // repliesCount: comment?.snippet?.totalReplyCount ?? 0,
         // videoId: comment?.snippet?.videoId,
+        // updatedAt: comment.snippet?.topLevelComment?.snippet?.updatedAt,
         remoteId: comment.id,
         platform: 'youtube',
         content: comment.snippet?.topLevelComment?.snippet?.textOriginal,
         author: comment.snippet?.topLevelComment?.snippet?.authorDisplayName,
         likes:
           Number(comment.snippet?.topLevelComment?.snippet?.likeCount) ?? 0,
-        // updatedAt: comment.snippet?.topLevelComment?.snippet?.updatedAt,
         publishedAt:
           comment.snippet?.topLevelComment?.snippet?.publishedAt ?? '',
       });
-
       if (comment?.replies?.comments?.length > 0) {
         comment?.replies?.comments.forEach((reply: any) => {
           flatMap.push({
+            // videoId: reply?.snippet?.videoId,
+            // updatedAt: reply?.snippet.updatedAt,
             parentId: reply?.snippet?.parentId,
             remoteId: reply.id,
             likes: Number(reply?.snippet?.likeCount) ?? 0,
-            // videoId: reply?.snippet?.videoId,
             content: reply?.snippet.textOriginal,
             platform: 'youtube',
             author: reply?.snippet.authorDisplayName,
-            // updatedAt: reply?.snippet.updatedAt,
             publishedAt: reply?.snippet.publishedAt ?? '',
           });
         });
@@ -109,7 +110,7 @@ export class DataFetchingConsumer {
     });
 
     this.logger.log('Comment data parsed');
-
+    console.log('FLAT MAP: ', flatMap.length);
     this.logger.log('Comment data saving');
     await this.contentPostRepository.updateContentPost({
       where: {
@@ -134,6 +135,7 @@ export class DataFetchingConsumer {
     });
 
     this.logger.log('Comment data saved');
+    return { taskId: newTask.id };
   }
 
   @OnQueueActive()
@@ -145,11 +147,9 @@ export class DataFetchingConsumer {
 
   @OnQueueCompleted()
   async onCompleted(job: Job) {
-    console.log(
-      `Completed job ${job.id} of type ${job.name} with data ${job.data}...`,
-    );
+    const additionalData = job.returnvalue;
     await this.nlpProcessQueue.add('async-sentiment-process', {
-      taskProcess: 'lallala',
+      taskId: additionalData?.taskId,
     });
   }
 }

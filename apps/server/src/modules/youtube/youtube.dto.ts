@@ -14,6 +14,10 @@ export class FetchVideoCommentDTO {
   @IsOptional()
   @IsNumber()
   size?: number;
+
+  @IsOptional()
+  @IsString()
+  pageToken?: string;
 }
 
 export class VideoDetailDTO {

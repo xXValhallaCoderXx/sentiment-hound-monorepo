@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 import {
   Process,
   Processor,
@@ -7,23 +8,79 @@ import {
 import { Logger } from '@nestjs/common';
 import { Job } from 'bull';
 import { NLP_PROCESSING_QUEUE } from 'apps/server/shared/constants';
-import { YoutubeService } from '../youtube/youtube.service';
 import { TaskRepository } from '../task/task.repository';
-import { ContentPostRepository } from '../content-post/content-post.repository';
 import { ResponseRepository } from '../response/response.repository';
+import { NaturalLanguageProcessingService } from '../natural-language-processing/natural-language-processing.service';
 
 @Processor(NLP_PROCESSING_QUEUE)
 export class NaturalLanguageProcessingConsumer {
   constructor(
-    private readonly youtubeService: YoutubeService,
+    private readonly nlpService: NaturalLanguageProcessingService,
     private readonly taskRepository: TaskRepository,
-    private readonly contentPostRepository: ContentPostRepository,
     private readonly responseRepository: ResponseRepository,
   ) {}
   private readonly logger = new Logger(NaturalLanguageProcessingConsumer.name);
   @Process('async-sentiment-process')
   async bulkDataProcess(job: Job) {
-    this.logger.log('Asyns Sentiment Process Started');
+    this.logger.log('Analyzing Sentiment Started');
+    const { taskId } = job.data;
+    const task = await this.taskRepository.findUnique({
+      where: {
+        id: taskId,
+      },
+      include: {
+        contentPost: {
+          include: {
+            responses: true,
+          },
+        },
+      },
+    });
+
+    // @ts-ignore
+    const responses = task?.contentPost?.responses;
+    const parsedResponses = responses?.map((response: any) => ({
+      id: response.id,
+      content: response.content,
+    }));
+    this.logger.log('Sentiment Parsing Completed');
+
+    await this.taskRepository.updateTask({
+      where: {
+        id: taskId,
+      },
+      data: {
+        status: 'analyzing-sentiment',
+      },
+    });
+
+    const response = await this.nlpService.analyzeSentiment(parsedResponses);
+    this.logger.log('Sentiment Analyzed');
+
+    const updatedResponses = response.map((res: any) => ({
+      id: res.id,
+      sentiment: res.sentiment,
+    }));
+
+    for (const res of updatedResponses) {
+      await this.responseRepository.update({
+        where: {
+          id: res.id,
+        },
+        data: {
+          sentiment: res.sentiment.toLowerCase(),
+        },
+      });
+    }
+    this.logger.log('Sentiment Saved');
+    await this.taskRepository.updateTask({
+      where: {
+        id: taskId,
+      },
+      data: {
+        status: 'completed',
+      },
+    });
   }
 
   @OnQueueActive()

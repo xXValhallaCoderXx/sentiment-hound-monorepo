@@ -15,6 +15,33 @@ export class ResponseRepository {
     });
   }
 
+  async update(params: {
+    where: Prisma.ResponseWhereUniqueInput;
+    data: Prisma.ResponseUpdateInput;
+  }): Promise<Response> {
+    const { where, data } = params;
+    return await this.prisma.response.update({
+      where,
+      data,
+    });
+  }
+
+  async updateMany(params: {
+    where: Prisma.ResponseWhereInput;
+    data: Prisma.ResponseUpdateManyMutationInput;
+  }): Promise<{ count: number }> {
+    const { where, data } = params;
+    try {
+      return await this.prisma.response.updateMany({
+        where,
+        data,
+      });
+    } catch (err) {
+      console.log(err);
+      return { count: 0 };
+    }
+  }
+
   async createMany(params: {
     data: Prisma.ResponseCreateManyInput;
   }): Promise<{ count: number }> {

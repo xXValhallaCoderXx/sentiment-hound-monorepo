@@ -37,6 +37,34 @@ export class YoutubeService {
     return videoCommentsResponse.data;
   }
 
+  async fetchAllVideoComments2(
+    data: FetchVideoCommentDTO,
+  ): Promise<any | null> {
+    const videoId = data.videoId;
+    const YOUTUBE_API_KEY = this.configService.get<string>('YOUTUBE_API_KEY');
+    const API_URL = this.configService.get<string>('YOUTUBE_BASE_API');
+
+    const comments = [];
+    let nextPageToken = null;
+
+    do {
+      const url = `${API_URL}/commentThreads?key=${YOUTUBE_API_KEY}&part=snippet,replies&videoId=${videoId}`;
+      const videoCommentsResponse: any = await this.httpService.axiosRef.get<
+        any,
+        IFetchAllComentsResponse
+      >(url, {
+        params: {
+          maxResults: data.size ?? 100,
+          pageToken: nextPageToken,
+        },
+      });
+      comments.push(...videoCommentsResponse?.data?.items);
+      nextPageToken = videoCommentsResponse?.data?.nextPageToken ?? null;
+    } while (nextPageToken);
+
+    return comments;
+  }
+
   async fetchVideoDetails(data: FetchVideoCommentDTO): Promise<VideoDetailDTO> {
     const videoId = data.videoId;
     const YOUTUBE_API_KEY = this.configService.get<string>('YOUTUBE_API_KEY');

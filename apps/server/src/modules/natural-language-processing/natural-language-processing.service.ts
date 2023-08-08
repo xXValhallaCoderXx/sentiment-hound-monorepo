@@ -4,6 +4,17 @@ import { YoutubeService } from '../youtube/youtube.service';
 import { ConfigService } from '@nestjs/config';
 import { HttpService } from '@nestjs/axios';
 
+interface ISentiment {
+  id: string;
+  content: string;
+}
+
+interface ISentimentResponse {
+  id: string;
+  content: string;
+  sentiment: string;
+}
+
 @Injectable()
 export class NaturalLanguageProcessingService {
   constructor(
@@ -39,5 +50,21 @@ export class NaturalLanguageProcessingService {
       console.log('ERROR', e);
     }
     return sentimentResponseJson;
+  }
+  async analyzeSentiment(data: ISentiment[]): Promise<any | null> {
+    const API_SERVER = this.configService.get<string>('API_SERVER');
+
+    try {
+      const sentimentResponseJson = await this.httpService.axiosRef.post(
+        `http://127.0.0.1:8000/analyze/strings`,
+        {
+          data,
+        },
+      );
+
+      return sentimentResponseJson.data;
+    } catch (e) {
+      console.log('ERROR', e);
+    }
   }
 }

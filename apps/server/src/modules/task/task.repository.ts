@@ -19,6 +19,14 @@ export class TaskRepository {
     return this.prisma.task.update({ where, data });
   }
 
+  async findUnique(params: {
+    where: Prisma.TaskWhereUniqueInput;
+    include?: Prisma.TaskInclude;
+  }): Promise<Task | null> {
+    const { where, include } = params;
+    return this.prisma.task.findUnique({ where, include });
+  }
+
   // async createTaskAssignContentPost(params: { data: Prisma.TaskCreateInput }): Promise<Task> {
   //   const { data } = params;
   //   return this.prisma.task.create({ data });
