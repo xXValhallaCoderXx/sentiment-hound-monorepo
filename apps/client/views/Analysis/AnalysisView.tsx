@@ -1,8 +1,27 @@
+import { useState, useEffect } from "react";
+import { useRouter } from "next/router";
 import { EmptyData } from "@client/shared/components/molecules/EmptyData";
 import { Card, Box, Button, Text, Flex, Input, Fade } from "@chakra-ui/react";
+import { useGetAnalysisMutation } from "@client/shared/slices/analysis/analysis.api";
 
 const AnalysisView = () => {
+  const router = useRouter();
+  const [value, setValue] = useState("");
+  const [triggerAnalysis, analysisApi] = useGetAnalysisMutation();
   const data = [];
+  useEffect(() => {
+    if (analysisApi.isSuccess) {
+      router.push("/dashboard/tasks");
+    }
+  }, [analysisApi]);
+
+  const handleSubmit = () => {
+    if (value) {
+      triggerAnalysis({
+        videoId: value,
+      });
+    }
+  };
   return (
     <Box>
       <Flex flexDirection={{ lg: "row", sm: "column" }} gap={10}>
@@ -19,8 +38,11 @@ const AnalysisView = () => {
                 Social Media URL
               </Text>
               <Box gap={4} display="flex">
-                <Input placeholder="Enter a social media URL" />
-                <Button bgColor="primary" color="white">
+                <Input
+                  onChange={(e) => setValue(e.target.value)}
+                  placeholder="Enter a social media URL"
+                />
+                <Button onClick={handleSubmit} bgColor="primary" color="white">
                   Analyze
                 </Button>
               </Box>
