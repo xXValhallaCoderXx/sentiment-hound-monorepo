@@ -15,25 +15,6 @@ import {
 import { YoutubeService } from '../youtube/youtube.service';
 import { TaskRepository } from '../task/task.repository';
 import { ContentPostRepository } from '../content-post/content-post.repository';
-import { ResponseRepository } from '../content-post-response/content-post-response.repository';
-
-interface IComment {
-  kind: string;
-  etag: string;
-  id: string;
-  snippet: {
-    videoId: string;
-    topLevelComment: {
-      kind: string;
-      etag: string;
-      id: string;
-      snippet: any;
-    };
-    canReply: boolean;
-    totalReplyCount: number;
-    isPublic: boolean;
-  };
-}
 
 @Processor(DATA_FETCHING_QUEUE)
 export class DataFetchingConsumer {
@@ -41,12 +22,11 @@ export class DataFetchingConsumer {
     private readonly youtubeService: YoutubeService,
     private readonly taskRepository: TaskRepository,
     private readonly contentPostRepository: ContentPostRepository,
-    private readonly responseRepository: ResponseRepository,
     @InjectQueue(NLP_PROCESSING_QUEUE) private readonly nlpProcessQueue: Queue,
   ) {}
   private readonly logger = new Logger(DataFetchingConsumer.name);
-  @Process('async-data-fetch')
-  async bulkDataFetch(job: Job) {
+  @Process('youtube-data-fetch')
+  async youtubeDataFetch(job: Job) {
     this.logger.log('Data Fetching Task Started');
     const youtubeDetails = await this.youtubeService.fetchVideoDetails(
       job.data,
@@ -64,6 +44,8 @@ export class DataFetchingConsumer {
       },
     });
 
+    this.logger.log('Youtube Video Content Data Received');
+
     const newTask = await this.taskRepository.createTask({
       data: {
         contentPost: {
@@ -74,8 +56,10 @@ export class DataFetchingConsumer {
       },
     });
 
+    this.logger.log('Fetching all comments');
+
     const comments = await this.youtubeService.fetchAllVideoComments2({
-      videoId: job?.data.videoId,
+      id: job?.data.videoId,
     });
 
     await this.taskRepository.updateTask({
@@ -87,15 +71,11 @@ export class DataFetchingConsumer {
       },
     });
 
-    this.logger.log('Data Fetching Task Completed');
-
+    this.logger.log(`Fetched ${comments?.length} comments}`);
     const flatMap: any = [];
-
+    this.logger.log('Parsing Comment Data');
     comments?.forEach((comment: any) => {
       flatMap.push({
-        // repliesCount: comment?.snippet?.totalReplyCount ?? 0,
-        // videoId: comment?.snippet?.videoId,
-        // updatedAt: comment.snippet?.topLevelComment?.snippet?.updatedAt,
         remoteId: comment.id,
         platform: 'youtube',
         content: comment.snippet?.topLevelComment?.snippet?.textOriginal,
@@ -108,8 +88,6 @@ export class DataFetchingConsumer {
       if (comment?.replies?.comments?.length > 0) {
         comment?.replies?.comments.forEach((reply: any) => {
           flatMap.push({
-            // videoId: reply?.snippet?.videoId,
-            // updatedAt: reply?.snippet.updatedAt,
             parentId: reply?.snippet?.parentId,
             remoteId: reply.id,
             likes: Number(reply?.snippet?.likeCount) ?? 0,
@@ -122,9 +100,7 @@ export class DataFetchingConsumer {
       }
     });
 
-    this.logger.log('Comment data parsed');
-    console.log('FLAT MAP: ', flatMap.length);
-    this.logger.log('Comment data saving');
+    this.logger.log(`Comment Data Saved - Parsed ${flatMap.length} comments`);
     await this.contentPostRepository.updateContentPost({
       where: {
         id: contentPost.id,
@@ -147,8 +123,15 @@ export class DataFetchingConsumer {
       },
     });
 
-    this.logger.log('Comment data saved');
+    this.logger.log('Youtube comment data has been saved');
     return { taskId: newTask.id };
+  }
+
+  @Process('twitter-data-fetch')
+  async bulkTweetFetch(job: Job) {
+    this.logger.log('Twitter Data Fetching Task Started');
+
+    return { taskId: 'newTask.id' };
   }
 
   @OnQueueActive()
@@ -160,9 +143,9 @@ export class DataFetchingConsumer {
 
   @OnQueueCompleted()
   async onCompleted(job: Job) {
-    const additionalData = job.returnvalue;
-    await this.nlpProcessQueue.add('async-sentiment-process', {
-      taskId: additionalData?.taskId,
-    });
+    // const additionalData = job.returnvalue;
+    // await this.nlpProcessQueue.add('async-sentiment-process', {
+    //   taskId: additionalData?.taskId,
+    // });
   }
 }

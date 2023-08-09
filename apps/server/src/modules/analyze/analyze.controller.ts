@@ -1,6 +1,6 @@
 import { Controller, Post, Logger, Body, HttpCode } from '@nestjs/common';
 import { AnalyzeService } from './analyze.service';
-import { AnalyzeYoutubeVideoSentimentDTO } from './analyze.dto';
+import { AnalyzeSentimentDTO } from './analyze.dto';
 
 @Controller('analyze')
 export class AnalyzeController {
@@ -9,7 +9,13 @@ export class AnalyzeController {
 
   @Post('youtube')
   @HttpCode(201)
-  analyzeYoutubeSentiment(@Body() body: AnalyzeYoutubeVideoSentimentDTO): any {
+  analyzeYoutubeSentiment(@Body() body: AnalyzeSentimentDTO): any {
     return this.sentimentService.analyzeYoutubeSentiment(body);
+  }
+
+  @Post('twitter')
+  @HttpCode(201)
+  analyzeTwitterSentiment(@Body() body: AnalyzeSentimentDTO): any {
+    return this.sentimentService.analyzeTwitterSentiment(body);
   }
 }

@@ -20,7 +20,7 @@ export class YoutubeService {
   ) {}
 
   async fetchAllVideoComments(data: FetchVideoCommentDTO): Promise<any | null> {
-    const videoId = data.videoId;
+    const videoId = data.id;
     const YOUTUBE_API_KEY = this.configService.get<string>('YOUTUBE_API_KEY');
     const API_URL = this.configService.get<string>('YOUTUBE_BASE_API');
 
@@ -40,7 +40,7 @@ export class YoutubeService {
   async fetchAllVideoComments2(
     data: FetchVideoCommentDTO,
   ): Promise<any | null> {
-    const videoId = data.videoId;
+    const videoId = data.id;
     const YOUTUBE_API_KEY = this.configService.get<string>('YOUTUBE_API_KEY');
     const API_URL = this.configService.get<string>('YOUTUBE_BASE_API');
 
@@ -66,7 +66,7 @@ export class YoutubeService {
   }
 
   async fetchVideoDetails(data: FetchVideoCommentDTO): Promise<VideoDetailDTO> {
-    const videoId = data.videoId;
+    const videoId = data.id;
     const YOUTUBE_API_KEY = this.configService.get<string>('YOUTUBE_API_KEY');
     const API_URL = this.configService.get<string>('YOUTUBE_BASE_API');
     const videoMetaData = `${API_URL}/videos?key=${YOUTUBE_API_KEY}&part=snippet&id=${videoId}`;

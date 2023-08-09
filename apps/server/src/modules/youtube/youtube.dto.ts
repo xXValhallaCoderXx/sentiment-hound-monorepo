@@ -10,7 +10,7 @@ import {
 export class FetchVideoCommentDTO {
   @IsNotEmpty()
   @IsString()
-  videoId: string;
+  id: string;
 
   @IsOptional()
   @IsNumber()
