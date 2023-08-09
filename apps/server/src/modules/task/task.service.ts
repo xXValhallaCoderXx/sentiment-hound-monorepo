@@ -52,7 +52,15 @@ export class TaskService {
         where,
         orderBy,
         include: {
-          contentPost: true,
+          contentPost: {
+            include: {
+              responses: {
+                select: {
+                  id: true,
+                },
+              },
+            },
+          },
         },
       },
       {

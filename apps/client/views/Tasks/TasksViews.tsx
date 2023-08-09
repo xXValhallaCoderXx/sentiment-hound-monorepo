@@ -22,6 +22,7 @@ const TaskViews = () => {
       title: task.contentPost?.title,
       description: task.contentPost?.description,
       author: task?.author,
+      count: task?.contentPost?.responses?.length,
     }));
     return filteredTasks;
   }, [tasks]);
@@ -29,8 +30,10 @@ const TaskViews = () => {
   return (
     <Box height="calc(100vh - 140px)">
       <Card p={4} sx={{ height: "100%" }}>
-        <Text fontSize="2xl">Tasks Overview</Text>
-        <Text fontSize="sm">Check the status of your tasks</Text>
+        <Box sx={{ pl: 4 }}>
+          <Text fontSize="2xl">Tasks Overview</Text>
+          <Text fontSize="sm">Check the status of your tasks</Text>
+        </Box>
         {parsedTasks.length === 0 && !isLoading && (
           <Box sx={{ height: "100%" }} display="flex" justifyContent="center">
             <EmptyData
