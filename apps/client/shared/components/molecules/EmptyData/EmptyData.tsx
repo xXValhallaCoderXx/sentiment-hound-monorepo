@@ -23,7 +23,11 @@ const EmptyData: FC<IEmptyDataProps> = ({ title, subtitle, cta }) => {
         </Text>
       )}
       {subtitle && <Text>{subtitle}</Text>}
-      {cta && <Button onClick={cta.onClick}>{cta.label}</Button>}
+      {cta && (
+        <Button sx={{ mt: 4 }} onClick={cta.onClick}>
+          {cta.label}
+        </Button>
+      )}
     </Box>
   );
 };

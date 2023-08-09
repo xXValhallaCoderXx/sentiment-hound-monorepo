@@ -8,10 +8,12 @@ import {
   Thead,
   Box,
   Tbody,
-  Card,
+  Badge,
+  Text,
   Td,
   Tfoot,
 } from "@chakra-ui/react";
+import Image from "next/image";
 import {
   flexRender,
   useReactTable,
@@ -21,6 +23,8 @@ import {
 } from "@tanstack/react-table";
 import { TablePagination } from "@client/shared/components/molecules/TablePagination";
 import { ColumnDef, createColumnHelper } from "@tanstack/react-table";
+import YoutubeLogo from "@client/public/logos/youtube-logo.png";
+import TwitterLogo from "@client/public/logos/twitter-logo.png";
 
 interface ITableRow {
   status: string;
@@ -32,12 +36,30 @@ const columnHelper = createColumnHelper<ITableRow>();
 export const userColumnDefs: ColumnDef<ITableRow, any>[] = [
   columnHelper.accessor((row) => row.platform, {
     id: "platform",
-    cell: (info) => <span>{info.getValue()}</span>,
+    cell: (info) => (
+      <Box display="flex" gap={2} alignItems="center">
+        <Image
+          alt="logo"
+          src={info.getValue() === "youtube" ? YoutubeLogo : TwitterLogo}
+          height={20}
+          width={20}
+        />{" "}
+        <Text fontSize="xs">{info.getValue()}</Text>
+      </Box>
+    ),
     // header: () => <span>Last Name</span>,
   }),
   columnHelper.accessor((row) => row.status, {
     id: "status",
-    cell: (info) => info.getValue(),
+    cell: (info) => (
+      <Badge
+        sx={{ p: 1, px: 2 }}
+        rounded={5}
+        colorScheme={info.getValue() === "completed" ? "green" : ""}
+      >
+        {info.getValue()}
+      </Badge>
+    ),
     footer: (info) => info.column.id,
   }),
 ];
@@ -67,65 +89,70 @@ const TaskTable: FC<ITaskTableProps> = ({ data }) => {
   const rows = table.getRowModel().rows;
 
   return (
-    <Box>
-      <Card mt={4} p={4}>
-        <TableContainer>
-          <Table variant="simple">
-            <TableCaption>Imperial to metric conversion factors</TableCaption>
-            <Thead>
-              <Tr>
-                {headers.map((header) => {
-                  const direction = header.column.getIsSorted();
-                  const arrow: any = {
-                    asc: "🔼",
-                    desc: "🔽",
-                  };
-                  const sort_indicator = direction && arrow[direction];
-                  return (
-                    <Th key={header.id}>
-                      {header.isPlaceholder ? null : (
-                        <div
-                          onClick={header.column.getToggleSortingHandler()}
-                          className="cursor-pointer flex gap-4"
-                        >
-                          {flexRender(
-                            header.column.columnDef.header,
-                            header.getContext()
-                          )}
-                          {direction && <span>{sort_indicator}</span>}
-                        </div>
+    <Box
+      sx={{
+        height: "100%",
+        display: "flex",
+        justifyContent: "space-between",
+        flexDirection: "column",
+      }}
+    >
+      <TableContainer>
+        <Table variant="simple">
+          <Thead>
+            <Tr>
+              {headers.map((header) => {
+                const direction = header.column.getIsSorted();
+                const arrow: any = {
+                  asc: "🔼",
+                  desc: "🔽",
+                };
+                const sort_indicator = direction && arrow[direction];
+                return (
+                  <Th key={header.id}>
+                    {header.isPlaceholder ? null : (
+                      <div
+                        onClick={header.column.getToggleSortingHandler()}
+                        className="cursor-pointer flex gap-4"
+                      >
+                        {flexRender(
+                          header.column.columnDef.header,
+                          header.getContext()
+                        )}
+                        {direction && <span>{sort_indicator}</span>}
+                      </div>
+                    )}
+                  </Th>
+                );
+              })}
+            </Tr>
+          </Thead>
+          <Tbody>
+            {rows.map((row) => (
+              <Tr key={row.id}>
+                {row.getVisibleCells().map((cell, index) => {
+                  return index === 0 ? (
+                    <Th key={cell.id}>
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext()
                       )}
                     </Th>
+                  ) : (
+                    <Td key={cell.id}>
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext()
+                      )}
+                    </Td>
                   );
                 })}
               </Tr>
-            </Thead>
-            <Tbody>
-              {rows.map((row) => (
-                <Tr key={row.id}>
-                  {row.getVisibleCells().map((cell, index) => {
-                    return index === 0 ? (
-                      <Th key={cell.id}>
-                        {flexRender(
-                          cell.column.columnDef.cell,
-                          cell.getContext()
-                        )}
-                      </Th>
-                    ) : (
-                      <Td key={cell.id}>
-                        {flexRender(
-                          cell.column.columnDef.cell,
-                          cell.getContext()
-                        )}
-                      </Td>
-                    );
-                  })}
-                </Tr>
-              ))}
-            </Tbody>
-          </Table>
-        </TableContainer>
-      </Card>
+            ))}
+          </Tbody>
+        </Table>
+      </TableContainer>
+
       <Box mt={4}>
         <TablePagination
           pageSize={10}
