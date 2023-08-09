@@ -15,7 +15,7 @@ import {
 import { YoutubeService } from '../youtube/youtube.service';
 import { TaskRepository } from '../task/task.repository';
 import { ContentPostRepository } from '../content-post/content-post.repository';
-import { ResponseRepository } from '../response/response.repository';
+import { ResponseRepository } from '../content-post-response/content-post-response.repository';
 
 interface IComment {
   kind: string;

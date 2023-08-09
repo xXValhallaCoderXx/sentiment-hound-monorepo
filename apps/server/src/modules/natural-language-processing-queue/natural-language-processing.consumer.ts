@@ -9,7 +9,7 @@ import { Logger } from '@nestjs/common';
 import { Job } from 'bull';
 import { NLP_PROCESSING_QUEUE } from 'apps/server/shared/constants';
 import { TaskRepository } from '../task/task.repository';
-import { ResponseRepository } from '../response/response.repository';
+import { ResponseRepository } from '../content-post-response/content-post-response.repository';
 import { NaturalLanguageProcessingService } from '../natural-language-processing/natural-language-processing.service';
 
 @Processor(NLP_PROCESSING_QUEUE)
