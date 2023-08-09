@@ -57,6 +57,10 @@ export class DataFetchingConsumer {
         contentId: youtubeDetails.id,
         platform: 'youtube',
         author: youtubeDetails.author,
+        title: youtubeDetails.title,
+        description: youtubeDetails.description,
+        publishedAt: youtubeDetails.publishedAt,
+        image: youtubeDetails.thumbnail?.url,
       },
     });
 
@@ -72,6 +76,15 @@ export class DataFetchingConsumer {
 
     const comments = await this.youtubeService.fetchAllVideoComments2({
       videoId: job?.data.videoId,
+    });
+
+    await this.taskRepository.updateTask({
+      where: {
+        id: newTask.id,
+      },
+      data: {
+        status: 'pending-sentiment',
+      },
     });
 
     this.logger.log('Data Fetching Task Completed');

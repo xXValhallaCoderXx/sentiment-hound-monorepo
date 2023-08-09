@@ -18,8 +18,8 @@ export class SentimentController {
     return this.sentimentService.analyzeYoutubeSentiment(body);
   }
 
-  @Post()
-  analyzeSentiment(): any {
-    return this.sentimentService.analyzeSentiment();
-  }
+  // @Post()
+  // analyzeSentiment(): any {
+  //   return this.sentimentService.analyzeSentiment();
+  // }
 }

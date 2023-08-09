@@ -4,6 +4,7 @@ import {
   IsDate,
   IsNumber,
   IsOptional,
+  IsObject,
 } from 'class-validator';
 
 export class FetchVideoCommentDTO {
@@ -34,8 +35,12 @@ export class VideoDetailDTO {
   @IsString()
   description: string;
 
-  @IsString()
-  thumbnail: string;
+  @IsObject()
+  thumbnail: {
+    url: string;
+    width: number;
+    height: number;
+  };
 
   @IsString()
   author: string;

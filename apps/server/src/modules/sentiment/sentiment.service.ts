@@ -42,51 +42,51 @@ export class SentimentService {
     return { status: 'ok' };
   }
 
-  async analyzeSentiment(): Promise<any | null> {
-    const { comments, flatMap, contentPost } =
-      await this.youtubeService.fetchVideoComments();
+  // async analyzeSentiment(): Promise<any | null> {
+  //   const { comments, flatMap, contentPost } =
+  //     await this.youtubeService.fetchVideoComments();
 
-    const res = await this.nlpService.parseData(flatMap, comments);
+  //   const res = await this.nlpService.parseData(flatMap, comments);
 
-    const storedContentPost = await this.prisma.contentPost.create({
-      data: {
-        platform: 'youtube',
-        contentId: contentPost?.id,
-      },
-    });
-    const storedPostId = storedContentPost.id;
+  //   const storedContentPost = await this.prisma.contentPost.create({
+  //     data: {
+  //       platform: 'youtube',
+  //       contentId: contentPost?.id,
+  //     },
+  //   });
+  //   const storedPostId = storedContentPost.id;
 
-    for (let index = 0; index < res?.data?.length; index++) {
-      const element = res?.data?.[index];
+  //   for (let index = 0; index < res?.data?.length; index++) {
+  //     const element = res?.data?.[index];
 
-      const storedComment = await this.prisma.response.create({
-        data: {
-          contentPostId: storedPostId,
-          remoteId: element.id ?? '',
-          sentiment: element.sentiment,
-          platform: 'youtube',
-          author: element.author,
-          publishedAt: element.publishedAt,
-          content: element.comment,
-        },
-      });
+  //     const storedComment = await this.prisma.response.create({
+  //       data: {
+  //         contentPostId: storedPostId,
+  //         remoteId: element.id ?? '',
+  //         sentiment: element.sentiment,
+  //         platform: 'youtube',
+  //         author: element.author,
+  //         publishedAt: element.publishedAt,
+  //         content: element.comment,
+  //       },
+  //     });
 
-      const aspectArray =
-        Object.entries(element?.aspects).map(([aspect, sentiment]) => ({
-          aspect,
-          sentiment,
-        })) || [];
+  //     const aspectArray =
+  //       Object.entries(element?.aspects).map(([aspect, sentiment]) => ({
+  //         aspect,
+  //         sentiment,
+  //       })) || [];
 
-      await this.prisma.aspect.createMany({
-        data: aspectArray?.map((aspect: any) => ({
-          responseId: storedComment.id,
-          sentiment: aspect.sentiment,
-          type: aspect.aspect,
-        })),
-      });
-    }
-    return {
-      status: 'success',
-    };
-  }
+  //     await this.prisma.aspect.createMany({
+  //       data: aspectArray?.map((aspect: any) => ({
+  //         responseId: storedComment.id,
+  //         sentiment: aspect.sentiment,
+  //         type: aspect.aspect,
+  //       })),
+  //     });
+  //   }
+  //   return {
+  //     status: 'success',
+  //   };
+  // }
 }
