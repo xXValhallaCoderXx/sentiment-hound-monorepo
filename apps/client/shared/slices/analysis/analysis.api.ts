@@ -1,15 +1,15 @@
 import { rootApi } from "../root-api";
 
-interface IGetAnalysisParams {
+export interface IGetAnalysisParams {
   platform: "youtube" | "twitter";
   id: string;
 }
 
 const analysisApi = rootApi.injectEndpoints({
   endpoints: (builder) => ({
-    startAnalysis: builder.mutation<IGetAnalysisParams, any>({
+    startAnalysis: builder.mutation<any, IGetAnalysisParams>({
       query: ({ id, platform }) => ({
-        url: `/sentiment/${platform}`,
+        url: `/analyze/${platform}`,
         method: "POST",
         body: {
           id,
