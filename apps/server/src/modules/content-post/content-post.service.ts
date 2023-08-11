@@ -12,9 +12,24 @@ export class ContentPostService {
   }
 
   async getContentPostWithResponses(id: string) {
-    return await this.contentPostRepository.getContentPost({
+    const data = await this.contentPostRepository.getContentPost({
       where: { id },
       include: { responses: true },
     });
+    const sentimentCounts: any = {
+      positive: 0,
+      negative: 0,
+      neutral: 0,
+    };
+    // @ts-ignore
+    data?.responses?.forEach((response: any) => {
+      console.log('SENTOMENT: ', response.sentiment);
+      sentimentCounts[response.sentiment]++;
+    });
+
+    return {
+      ...data,
+      sentimentCounts,
+    };
   }
 }

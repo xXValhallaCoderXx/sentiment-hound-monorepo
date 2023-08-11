@@ -8,4 +8,9 @@ export interface IContentPost {
   publishedAt: string;
   title: string;
   responses: any;
+  sentimentCounts: {
+    positive: number;
+    negative: number;
+    neutral: number;
+  };
 }

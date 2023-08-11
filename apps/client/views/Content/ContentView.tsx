@@ -10,7 +10,7 @@ const ContentPageView = () => {
         Analyzed Posts
       </Text>
       <Box>
-        <ContentPostTable data={content} />
+        <ContentPostTable data={content ?? []} />
       </Box>
     </Card>
   );

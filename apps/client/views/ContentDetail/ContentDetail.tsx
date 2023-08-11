@@ -1,6 +1,7 @@
 import { useGetContentDetailQuery } from "@client/shared/slices/content/content.api";
 import { useRouter } from "next/router";
 import Image from "next/image";
+import ContentDetailTable from "./components/ContentDetailTable";
 import { Card, Text, Box, Spinner, Fade } from "@chakra-ui/react";
 
 const ContentDetailView = () => {
@@ -50,19 +51,22 @@ const ContentDetailView = () => {
             <Text mb={2}>Sentiment Overview</Text>
             <Box display="flex" justifyContent="space-between">
               <Text fontSize="sm">Positive: </Text>
-              <Text fontSize="sm">0</Text>
+              <Text fontSize="sm">{data?.sentimentCounts.positive}</Text>
             </Box>
             <Box display="flex" justifyContent="space-between">
-              <Text fontSize="sm">Positive: </Text>
-              <Text fontSize="sm">0</Text>
+              <Text fontSize="sm">Negative: </Text>
+              <Text fontSize="sm">{data?.sentimentCounts.negative}</Text>
             </Box>
             <Box display="flex" justifyContent="space-between">
-              <Text fontSize="sm">Positive: </Text>
-              <Text fontSize="sm">0</Text>
+              <Text fontSize="sm">Neutral: </Text>
+              <Text fontSize="sm">{data?.sentimentCounts.neutral}</Text>
             </Box>
           </Box>
         </Box>
       </Card>
+      <Box>
+        <ContentDetailTable data={data?.responses} />
+      </Box>
     </Fade>
   );
 };
