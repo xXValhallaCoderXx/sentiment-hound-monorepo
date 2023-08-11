@@ -30,10 +30,11 @@ export class DataFetchingConsumer {
   @Process('youtube-data-fetch')
   async youtubeDataFetch(job: Job) {
     this.logger.log('Data Fetching Task Started');
+    console.log('JOB DATA: ', job.data);
     const youtubeDetails = await this.youtubeService.fetchVideoDetails(
       job.data,
     );
-
+    console.log('YOUTUBE: ', youtubeDetails);
     const contentPost = await this.contentPostRepository.createContentPost({
       data: {
         contentId: youtubeDetails.id,
@@ -160,6 +161,7 @@ export class DataFetchingConsumer {
 
   @OnQueueFailed()
   async onFailed(job: Job) {
+    console.log('JOB: ', job);
     console.log(
       `Failed processing job ${job.id} of type ${job.name} with data ${job.data}...`,
     );

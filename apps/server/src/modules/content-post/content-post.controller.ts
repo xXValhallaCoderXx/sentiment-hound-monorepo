@@ -1,4 +1,4 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, Param } from '@nestjs/common';
 import { ContentPostService } from './content-post.service';
 
 @Controller('content-post')
@@ -8,5 +8,10 @@ export class ContentPostController {
   @Get()
   getAllContentPostsWithSentiment(): any {
     return this.contentPostService.getContentPostWithSentiment();
+  }
+
+  @Get(':id')
+  getContentPostWithResponses(@Param('id') id: string) {
+    return this.contentPostService.getContentPostWithResponses(id);
   }
 }

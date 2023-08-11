@@ -17,6 +17,7 @@ import { useGetSentimentQuery } from "@client/shared/slices/sentiment/sentiment-
 const OverviewView = () => {
   const { data, isLoading } = useGetSentimentQuery({});
   console.log("SENTIMENT: ", data);
+
   return (
     <Box overflow="hidden">
       <Card p={4}>

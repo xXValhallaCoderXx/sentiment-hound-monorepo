@@ -16,13 +16,30 @@ export class ContentPostRepository {
     });
   }
 
+  async getContentPost(params: {
+    where: Prisma.ContentPostWhereUniqueInput;
+    include?: Prisma.ContentPostInclude;
+  }): Promise<ContentPost | null> {
+    try {
+      const { where, include } = params;
+      return await this.prisma.contentPost.findUnique({
+        where,
+        include,
+      });
+    } catch (err) {
+      throw new Error(err);
+    }
+  }
+
   async getAllContentPosts(params: {
     where?: Prisma.ContentPostWhereInput;
+    include?: Prisma.ContentPostInclude;
   }): Promise<ContentPost[]> {
     try {
-      const { where } = params;
+      const { where, include } = params;
       return await this.prisma.contentPost.findMany({
         where,
+        include,
       });
     } catch (err) {
       throw new Error(err);

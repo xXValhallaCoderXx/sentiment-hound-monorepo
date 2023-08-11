@@ -10,4 +10,11 @@ export class ContentPostService {
       where: { responses: { some: { sentiment: { not: null } } } },
     });
   }
+
+  async getContentPostWithResponses(id: string) {
+    return await this.contentPostRepository.getContentPost({
+      where: { id },
+      include: { responses: true },
+    });
+  }
 }

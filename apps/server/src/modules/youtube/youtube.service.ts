@@ -67,12 +67,15 @@ export class YoutubeService {
 
   async fetchVideoDetails(data: FetchVideoCommentDTO): Promise<VideoDetailDTO> {
     const videoId = data.id;
+    console.log('VIDEO ID: ', videoId);
     const YOUTUBE_API_KEY = this.configService.get<string>('YOUTUBE_API_KEY');
     const API_URL = this.configService.get<string>('YOUTUBE_BASE_API');
     const videoMetaData = `${API_URL}/videos?key=${YOUTUBE_API_KEY}&part=snippet&id=${videoId}`;
+    console.log('START API ', API_URL);
     const videoMetaResponse = await this.httpService.axiosRef.get(
       videoMetaData,
     );
+    console.log('VIDEO META: ', videoMetaResponse);
     const videoDetails = videoMetaResponse.data?.items[0];
     return {
       id: videoDetails?.id,
