@@ -16,19 +16,30 @@ export class ContentPostRepository {
     });
   }
 
+  async getAllContentPosts(params: {
+    where?: Prisma.ContentPostWhereInput;
+  }): Promise<ContentPost[]> {
+    try {
+      const { where } = params;
+      return await this.prisma.contentPost.findMany({
+        where,
+      });
+    } catch (err) {
+      throw new Error(err);
+    }
+  }
+
   async updateContentPost(params: {
     where: Prisma.ContentPostWhereUniqueInput;
     data: Prisma.ContentPostUpdateInput;
   }): Promise<ContentPost> {
     const { where, data } = params;
-    console.log('WHAEEEERE: ', where);
     try {
       return await this.prisma.contentPost.update({
         where,
         data,
       });
     } catch (err) {
-      console.log('ERROR: ', err);
       throw new Error(err);
     }
   }

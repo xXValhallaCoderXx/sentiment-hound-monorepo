@@ -43,6 +43,11 @@ const LinkItems: Array<LinkItemProps> = [
         path: "/dashboard/sentiment",
       },
       {
+        name: "Content",
+        icon: FiTrendingUp,
+        path: "/dashboard/sentiment/content",
+      },
+      {
         name: "Analysis",
         icon: FiTrendingUp,
         path: "/dashboard/sentiment/analysis",
