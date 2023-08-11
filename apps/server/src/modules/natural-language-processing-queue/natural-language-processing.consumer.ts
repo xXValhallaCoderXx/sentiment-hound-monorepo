@@ -4,6 +4,8 @@ import {
   Processor,
   OnQueueActive,
   OnQueueCompleted,
+  OnQueueError,
+  OnQueueFailed,
 } from '@nestjs/bull';
 import { Logger } from '@nestjs/common';
 import { Job } from 'bull';
@@ -95,5 +97,28 @@ export class NaturalLanguageProcessingConsumer {
     console.log(
       `Completed job ${job.id} of type ${job.name} with data ${job.data}...`,
     );
+  }
+
+  @OnQueueError()
+  async onError(job: Job) {
+    console.log(
+      `Error processing job ${job.id} of type ${job.name} with data ${job.data}...`,
+    );
+  }
+
+  @OnQueueFailed()
+  async onFailed(job: Job) {
+    console.log(
+      `Failed processing job ${job.id} of type ${job.name} with data ${job.data}...`,
+    );
+    console.log('Job failed', job);
+    await this.taskRepository.updateTask({
+      where: {
+        id: job.data?.taskId,
+      },
+      data: {
+        status: 'sentiment-failed',
+      },
+    });
   }
 }

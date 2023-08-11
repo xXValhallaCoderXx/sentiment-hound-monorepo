@@ -16,4 +16,4 @@ const taskApi = rootApi.injectEndpoints({
   }),
 });
 
-export const { useGetTasksQuery } = taskApi;
+export const { useGetTasksQuery, useLazyGetTasksQuery } = taskApi;

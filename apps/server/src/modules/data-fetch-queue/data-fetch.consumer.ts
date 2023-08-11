@@ -4,6 +4,8 @@ import {
   InjectQueue,
   OnQueueActive,
   OnQueueCompleted,
+  OnQueueError,
+  OnQueueFailed,
 } from '@nestjs/bull';
 import { Logger } from '@nestjs/common';
 import { Job } from 'bull';
@@ -56,10 +58,10 @@ export class DataFetchingConsumer {
       },
     });
 
-    this.logger.log('Fetching all comments');
+    this.logger.log(`Fetching all comments for video ${job?.data.id}`);
 
     const comments = await this.youtubeService.fetchAllVideoComments2({
-      id: job?.data.videoId,
+      id: job?.data.id,
     });
 
     await this.taskRepository.updateTask({
@@ -143,9 +145,23 @@ export class DataFetchingConsumer {
 
   @OnQueueCompleted()
   async onCompleted(job: Job) {
-    // const additionalData = job.returnvalue;
-    // await this.nlpProcessQueue.add('async-sentiment-process', {
-    //   taskId: additionalData?.taskId,
-    // });
+    const additionalData = job.returnvalue;
+    await this.nlpProcessQueue.add('async-sentiment-process', {
+      taskId: additionalData?.taskId,
+    });
+  }
+
+  @OnQueueError()
+  async onError(job: Job) {
+    console.log(
+      `Error processing job ${job.id} of type ${job.name} with data ${job.data}...`,
+    );
+  }
+
+  @OnQueueFailed()
+  async onFailed(job: Job) {
+    console.log(
+      `Failed processing job ${job.id} of type ${job.name} with data ${job.data}...`,
+    );
   }
 }

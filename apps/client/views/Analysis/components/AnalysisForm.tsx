@@ -4,34 +4,45 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { IGetAnalysisParams } from "@client/shared/slices/analysis/analysis.api";
 import { Card, Box, Button, Text, Input } from "@chakra-ui/react";
+import {
+  YOUTUBE_REGEX,
+  TWITTER_REGEX,
+} from "@client/shared/utils/regex-strings";
 
 type Inputs = {
   contentUrl: string;
 };
 
-const youtubeTwitterUrlValidator = (value: string) => {
-  const youtubeRegex =
-    /^(?:https?:\/\/)?(?:www\.)?youtube\.com\/watch\?v=([a-zA-Z0-9_-]{11})/;
-  const twitterRegex =
-    /^(?:https?:\/\/)?(?:www\.)?twitter\.com\/[^/]+\/status\/([0-9]+)/;
+function extractId(url: string) {
+  if (YOUTUBE_REGEX.test(url)) {
+    const matches: any = url.match(YOUTUBE_REGEX);
+    return {
+      type: "youtube",
+      id: matches[1],
+    };
+  } else if (TWITTER_REGEX.test(url)) {
+    const matches: any = url.match(TWITTER_REGEX);
+    return {
+      type: "twitter",
+      id: matches[2],
+    };
+  } else {
+    return null; // Return null for invalid URLs
+  }
+}
 
-  if (youtubeRegex.test(value)) {
+const youtubeTwitterUrlValidator = (value: string) => {
+  if (YOUTUBE_REGEX.test(value)) {
     return true;
-  } else if (twitterRegex.test(value)) {
+  } else if (TWITTER_REGEX.test(value)) {
     return true;
   }
   return false;
 };
 const checkPlatform = (value: string) => {
-  // Regular expressions for YouTube and Twitter URLs
-  const youtubeRegex =
-    /^(?:https?:\/\/)?(?:www\.)?youtube\.com\/watch\?v=([a-zA-Z0-9_-]{11})/;
-  const twitterRegex =
-    /^(?:https?:\/\/)?(?:www\.)?twitter\.com\/[^/]+\/status\/([0-9]+)/;
-
-  if (youtubeRegex.test(value)) {
+  if (YOUTUBE_REGEX.test(value)) {
     return "youtube";
-  } else if (twitterRegex.test(value)) {
+  } else if (TWITTER_REGEX.test(value)) {
     return "twitter";
   }
 
@@ -56,7 +67,6 @@ interface IAnalysisFormProps {
 const AnalysisForm: FC<IAnalysisFormProps> = ({ onSubmit }) => {
   const {
     register,
-
     handleSubmit,
     watch,
     formState: { errors, isValid },
@@ -65,9 +75,9 @@ const AnalysisForm: FC<IAnalysisFormProps> = ({ onSubmit }) => {
   });
   const [platform, setPlatform] = useState("");
   const handleOnSubmit: SubmitHandler<Inputs> = (data) => {
-    if (platform) {
+    if (platform && extractId(data.contentUrl)) {
       onSubmit({
-        id: data.contentUrl,
+        id: extractId(data.contentUrl)?.id,
         // @ts-ignore
         platform,
       });
