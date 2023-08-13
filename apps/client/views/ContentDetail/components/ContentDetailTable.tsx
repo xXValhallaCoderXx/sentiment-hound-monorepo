@@ -9,6 +9,7 @@ import {
   Box,
   Tbody,
   Td,
+  Badge,
   Text,
 } from "@chakra-ui/react";
 import Image from "next/image";
@@ -36,6 +37,12 @@ interface ITableRow {
   sentiment: string;
 }
 
+const COLOR_MAP: any = {
+  positive: "green",
+  negative: "red",
+  neutral: "gray",
+};
+
 const columnHelper = createColumnHelper<ITableRow>();
 
 export const userColumnDefs: ColumnDef<ITableRow, any>[] = [
@@ -62,7 +69,11 @@ export const userColumnDefs: ColumnDef<ITableRow, any>[] = [
   }),
   columnHelper.accessor((row) => row.sentiment, {
     id: "sentiment",
-    cell: (info) => info.getValue(),
+    cell: (info) => (
+      <Badge colorScheme={COLOR_MAP[info.getValue() ?? "neutral"]}>
+        {info.getValue()}
+      </Badge>
+    ),
     footer: (info) => info.column.id,
   }),
 ];
@@ -94,79 +105,21 @@ const ContentDetailTable: FC<IContentPostTableProps> = ({ data }) => {
   };
 
   return (
-    <Box>
-      <Box
-        sx={{
-          display: "flex",
-          overflow: "hidden",
-          overflowY: "auto",
-          justifyContent: "space-between",
-          flexDirection: "column",
-        }}
-      >
-        <Box>
-          <Box sx={{ mt: 5, mb: 5, px: 4 }}>
-            <Input placeholder="Search" />
-          </Box>
-          <TableContainer>
-            <Table variant="simple">
-              <Thead>
-                <Tr>
-                  {headers.map((header) => {
-                    const direction = header.column.getIsSorted();
-                    const arrow: any = {
-                      asc: "🔼",
-                      desc: "🔽",
-                    };
-                    const sort_indicator = direction && arrow[direction];
-                    return (
-                      <Th key={header.id}>
-                        {header.isPlaceholder ? null : (
-                          <div
-                            onClick={header.column.getToggleSortingHandler()}
-                            className="cursor-pointer flex gap-4"
-                          >
-                            {flexRender(
-                              header.column.columnDef.header,
-                              header.getContext()
-                            )}
-                            {direction && <span>{sort_indicator}</span>}
-                          </div>
-                        )}
-                      </Th>
-                    );
-                  })}
-                </Tr>
-              </Thead>
-              <Tbody>
-                {rows.map((row) => (
-                  <Tr key={row.id} onClick={handleOnClickRow(row?.original)}>
-                    {row.getVisibleCells().map((cell, index) => {
-                      return index === 0 ? (
-                        <Th key={cell.id}>
-                          {flexRender(
-                            cell.column.columnDef.cell,
-                            cell.getContext()
-                          )}
-                        </Th>
-                      ) : (
-                        <Td key={cell.id}>
-                          {flexRender(
-                            cell.column.columnDef.cell,
-                            cell.getContext()
-                          )}
-                        </Td>
-                      );
-                    })}
-                  </Tr>
-                ))}
-              </Tbody>
-            </Table>
-          </TableContainer>
+    <Box
+      display="flex"
+      flex={1}
+      flexDirection="column"
+      justifyContent="space-between"
+    >
+      <Box>
+        <Box sx={{ mt: 5, mb: 5, px: 4 }}>
+          <Input placeholder="Search" />
         </Box>
+        hah
       </Box>
       <Box mt={4}>
-        <TablePagination
+        hehessss
+        {/* <TablePagination
           pageSize={10}
           pageOptions={[5, 10, 15, 20]}
           pageIndex={0}
@@ -177,10 +130,68 @@ const ContentDetailTable: FC<IContentPostTableProps> = ({ data }) => {
           canNextPage={table.getCanNextPage()}
           canPreviousPage={table.getCanPreviousPage()}
           setPageSize={() => console.log("Set")}
-        />
+        /> */}
       </Box>
     </Box>
   );
 };
 
 export default ContentDetailTable;
+
+{
+  /* <TableContainer>
+          <Table variant="simple">
+            <Thead>
+              <Tr>
+                {headers.map((header) => {
+                  const direction = header.column.getIsSorted();
+                  const arrow: any = {
+                    asc: "🔼",
+                    desc: "🔽",
+                  };
+                  const sort_indicator = direction && arrow[direction];
+                  return (
+                    <Th key={header.id}>
+                      {header.isPlaceholder ? null : (
+                        <div
+                          onClick={header.column.getToggleSortingHandler()}
+                          className="cursor-pointer flex gap-4"
+                        >
+                          {flexRender(
+                            header.column.columnDef.header,
+                            header.getContext()
+                          )}
+                          {direction && <span>{sort_indicator}</span>}
+                        </div>
+                      )}
+                    </Th>
+                  );
+                })}
+              </Tr>
+            </Thead>
+            <Tbody>
+              {rows.map((row) => (
+                <Tr key={row.id} onClick={handleOnClickRow(row?.original)}>
+                  {row.getVisibleCells().map((cell, index) => {
+                    return index === 0 ? (
+                      <Th key={cell.id}>
+                        {flexRender(
+                          cell.column.columnDef.cell,
+                          cell.getContext()
+                        )}
+                      </Th>
+                    ) : (
+                      <Td key={cell.id}>
+                        {flexRender(
+                          cell.column.columnDef.cell,
+                          cell.getContext()
+                        )}
+                      </Td>
+                    );
+                  })}
+                </Tr>
+              ))}
+            </Tbody>
+          </Table>
+        </TableContainer> */
+}

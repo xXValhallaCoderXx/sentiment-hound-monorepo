@@ -23,7 +23,6 @@ export class ContentPostService {
     };
     // @ts-ignore
     data?.responses?.forEach((response: any) => {
-      console.log('SENTOMENT: ', response.sentiment);
       sentimentCounts[response.sentiment]++;
     });
 
