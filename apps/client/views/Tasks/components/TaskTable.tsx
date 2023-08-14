@@ -102,12 +102,13 @@ const TaskTable: FC<ITaskTableProps> = ({ data, paginationData }) => {
   const rows = table.getRowModel().rows;
 
   return (
-    <Box>
+    <Box style={{ height: "100%" }}>
       <Box
         sx={{
           display: "flex",
           overflow: "hidden",
           overflowY: "auto",
+          height: "100%",
           justifyContent: "space-between",
           flexDirection: "column",
         }}
@@ -172,20 +173,20 @@ const TaskTable: FC<ITaskTableProps> = ({ data, paginationData }) => {
             </Table>
           </TableContainer>
         </Box>
-      </Box>
-      <Box mt={4}>
-        <TablePagination
-          pageSize={paginationData.perPage}
-          pageOptions={[5, 10, 15, 20]}
-          pageIndex={paginationData.currentPage}
-          pageCount={paginationData.total}
-          nextPage={table.nextPage}
-          previousPage={table.previousPage}
-          gotoPage={table.setPageIndex}
-          canNextPage={table.getCanNextPage()}
-          canPreviousPage={table.getCanPreviousPage()}
-          setPageSize={() => console.log("Set")}
-        />
+        <Box mt={4}>
+          <TablePagination
+            pageSize={paginationData.perPage}
+            pageOptions={[5, 10, 15, 20]}
+            pageIndex={paginationData.currentPage}
+            pageCount={paginationData.total}
+            nextPage={table.nextPage}
+            previousPage={table.previousPage}
+            gotoPage={table.setPageIndex}
+            canNextPage={table.getCanNextPage()}
+            canPreviousPage={table.getCanPreviousPage()}
+            setPageSize={() => console.log("Set")}
+          />
+        </Box>
       </Box>
     </Box>
   );
