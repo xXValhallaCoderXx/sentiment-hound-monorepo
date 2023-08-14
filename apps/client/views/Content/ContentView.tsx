@@ -5,11 +5,11 @@ import ContentPostTable from "./components/ContentPostTable";
 const ContentPageView = () => {
   const { data: content, isLoading } = useGetContentQuery({});
   return (
-    <Card p={4}>
+    <Card p={4} sx={{ height: "100%" }}>
       <Text fontSize="2xl" fontWeight={500}>
         Analyzed Posts
       </Text>
-      <Box>
+      <Box sx={{ height: "100%" }}>
         <ContentPostTable data={content ?? []} />
       </Box>
     </Card>

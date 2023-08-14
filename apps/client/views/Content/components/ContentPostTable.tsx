@@ -92,10 +92,11 @@ const ContentPostTable: FC<IContentPostTableProps> = ({ data }) => {
   };
 
   return (
-    <Box>
+    <Box sx={{ height: "100%" }}>
       <Box
         sx={{
           display: "flex",
+          height: "100%",
           overflow: "hidden",
           overflowY: "auto",
           justifyContent: "space-between",
