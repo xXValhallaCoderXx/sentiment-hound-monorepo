@@ -1,8 +1,8 @@
 import { useGetContentDetailQuery } from "@client/shared/slices/content/content.api";
 import { useRouter } from "next/router";
-import Image from "next/image";
-import ContentDetailTable from "./components/ContentDetailTable";
-import { Card, Text, Box, Spinner, Fade } from "@chakra-ui/react";
+import ContentInfo from "./components/ContentInfo";
+import ContentTable from "./components/ContentTable";
+import { Text, Box, Spinner } from "@chakra-ui/react";
 
 const ContentDetailView = () => {
   const router = useRouter();
@@ -37,140 +37,23 @@ const ContentDetailView = () => {
       gap={6}
       style={{ height: "100%" }}
     >
-      <Box maxHeight={200} flexBasis="20%">
-        <Card height="100%">hshs</Card>
+      <Box maxHeight={300} flexBasis="20%">
+        <ContentInfo
+          image={data?.image}
+          publishedAt={data?.publishedAt || ""}
+          title={data?.title || ""}
+          sentiment={{
+            positive: data?.sentimentCounts.positive || 0,
+            negative: data?.sentimentCounts.negative || 0,
+            neutral: data?.sentimentCounts.neutral || 0,
+          }}
+        />
       </Box>
       <Box sx={{ overflowX: "scroll" }} flexBasis="80%">
-        <Card sx={{ overflowX: "scroll" }} height="100%">
-          <Box style={{ height: 200 }}>
-            <div>asda</div>
-            <div style={{ height: 100 }}>asda</div>
-            <div>asda</div>
-          </Box>
-          <Box sx={{ height: 200 }}>
-            <div>asda</div>
-            <div>asda</div>
-            <div>asda</div>
-          </Box>
-          <Box sx={{ height: 200 }}>
-            <div>asda</div>
-            <div>asda</div>
-            <div>asda</div>
-          </Box>
-          <Box sx={{ height: 200 }}>
-            <div>asda</div>
-            <div>asda</div>
-            <div>asda</div>
-          </Box>
-          <Box sx={{ height: 200 }}>
-            <div>asda</div>
-            <div>asda</div>
-            <div>asda</div>
-          </Box>
-          <Box sx={{ height: 200 }}>
-            <div>asda</div>
-            <div>asda</div>
-            <div>asda</div>
-          </Box>
-          <Box sx={{ height: 200 }}>
-            <div>asda</div>
-            <div>asda</div>
-            <div>asda</div>
-          </Box>
-          <Box sx={{ height: 200 }}>
-            <div>asda</div>
-            <div>asda</div>
-            <div>asda</div>
-          </Box>
-          <Box sx={{ height: 200 }}>
-            <div>asda</div>
-            <div>asda</div>
-            <div>asda</div>
-          </Box>
-        </Card>
+        <ContentTable data={data?.responses} />
       </Box>
-
-      {/* <Card p={4}>
-        <Box display="flex" justifyContent="space-between">
-          <Box>
-            <Text fontSize="2xl" fontWeight={500}>
-              {data?.title}
-            </Text>
-            {data?.image && (
-              <Image
-                src={data?.image}
-                alt="post-image"
-                width={200}
-                height={150}
-              />
-            )}
-            <Text>Published: {data?.publishedAt}</Text>
-          </Box>
-          <Box>
-            <Text mb={2}>Sentiment Overview</Text>
-            <Box display="flex" justifyContent="space-between">
-              <Text fontSize="sm">Positive: </Text>
-              <Text fontSize="sm">{data?.sentimentCounts.positive}</Text>
-            </Box>
-            <Box display="flex" justifyContent="space-between">
-              <Text fontSize="sm">Negative: </Text>
-              <Text fontSize="sm">{data?.sentimentCounts.negative}</Text>
-            </Box>
-            <Box display="flex" justifyContent="space-between">
-              <Text fontSize="sm">Neutral: </Text>
-              <Text fontSize="sm">{data?.sentimentCounts.neutral}</Text>
-            </Box>
-          </Box>
-        </Box>
-      </Card>
-      <Box display="flex" flex={1} style={{ backgroundColor: "red" }}>
-        <Card mt={6}>
-          <ContentDetailTable data={data?.responses} />
-        </Card>
-      </Box> */}
     </Box>
   );
 };
 
 export default ContentDetailView;
-
-{
-  /* <Card p={4}> */
-}
-{
-  /* <Box display="flex" justifyContent="space-between">
-          <Box>
-            <Text fontSize="2xl" fontWeight={500}>
-              {data?.title}
-            </Text>
-            {data?.image && (
-              <Image
-                src={data?.image}
-                alt="post-image"
-                width={200}
-                height={150}
-              />
-            )}
-            <Text>Published: {data?.publishedAt}</Text>
-          </Box>
-          <Box>
-            <Text mb={2}>Sentiment Overview</Text>
-            <Box display="flex" justifyContent="space-between">
-              <Text fontSize="sm">Positive: </Text>
-              <Text fontSize="sm">{data?.sentimentCounts.positive}</Text>
-            </Box>
-            <Box display="flex" justifyContent="space-between">
-              <Text fontSize="sm">Negative: </Text>
-              <Text fontSize="sm">{data?.sentimentCounts.negative}</Text>
-            </Box>
-            <Box display="flex" justifyContent="space-between">
-              <Text fontSize="sm">Neutral: </Text>
-              <Text fontSize="sm">{data?.sentimentCounts.neutral}</Text>
-            </Box>
-          </Box>
-        </Box>
-      </Card>
-      <Box>
-       
-      </Box> */
-}

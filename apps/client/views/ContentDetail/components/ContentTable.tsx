@@ -1,34 +1,38 @@
 import { useState, FC } from "react";
+import { useRouter } from "next/router";
 import {
-  TableContainer,
-  Table,
-  Input,
-  Tr,
-  Th,
-  Thead,
+  Card,
   Box,
-  Tbody,
-  Td,
+  Input,
   Badge,
   Text,
+  TableContainer,
+  Table,
+  Th,
+  Td,
+  Thead,
+  Tr,
+  Tbody,
 } from "@chakra-ui/react";
-import Image from "next/image";
 import {
   flexRender,
   useReactTable,
   getPaginationRowModel,
   getCoreRowModel,
   getSortedRowModel,
+  ColumnDef,
+  createColumnHelper,
 } from "@tanstack/react-table";
 import { TablePagination } from "@client/shared/components/molecules/TablePagination";
-import { ColumnDef, createColumnHelper } from "@tanstack/react-table";
-import YoutubeLogo from "@client/public/logos/youtube-logo.png";
-import TwitterLogo from "@client/public/logos/twitter-logo.png";
-import { useRouter } from "next/router";
 
-interface IContentPostTableProps {
+interface IContentTableProps {
   data: any;
 }
+const COLOR_MAP: any = {
+  positive: "green",
+  negative: "red",
+  neutral: "gray",
+};
 
 interface ITableRow {
   author: string;
@@ -36,12 +40,6 @@ interface ITableRow {
   likes: string;
   sentiment: string;
 }
-
-const COLOR_MAP: any = {
-  positive: "green",
-  negative: "red",
-  neutral: "gray",
-};
 
 const columnHelper = createColumnHelper<ITableRow>();
 
@@ -78,8 +76,9 @@ export const userColumnDefs: ColumnDef<ITableRow, any>[] = [
   }),
 ];
 
-const ContentDetailTable: FC<IContentPostTableProps> = ({ data }) => {
+const ContentTable: FC<IContentTableProps> = ({ data = [] }) => {
   const [sorting, setSorting] = useState<any>([]);
+  console.log("DATA: ", data);
   const router = useRouter();
   const table = useReactTable({
     columns: userColumnDefs,
@@ -96,50 +95,28 @@ const ContentDetailTable: FC<IContentPostTableProps> = ({ data }) => {
     onSortingChange: setSorting,
   });
 
+  const handleOnClickRow = (_row: any) => () => {
+    // router.push(`/dashboard/sentiment/content/${_row.id}`);
+  };
+
   const headers = table.getFlatHeaders();
   const rows = table.getRowModel().rows;
 
-  const handleOnClickRow = (_row: any) => () => {
-    console.log("ROW: ", _row);
-    router.push(`/dashboard/sentiment/content/${_row.id}`);
-  };
-
   return (
-    <Box
-      display="flex"
-      flex={1}
-      flexDirection="column"
-      justifyContent="space-between"
+    <Card
+      sx={{
+        overflowX: "scroll",
+        display: "flex",
+        justifyContent: "space-between",
+        position: "relative",
+      }}
+      height="100%"
     >
-      <Box>
-        <Box sx={{ mt: 5, mb: 5, px: 4 }}>
-          <Input placeholder="Search" />
-        </Box>
-        hah
+      <Box sx={{ position: "absolute" }}>
+        <Input placeholder="Search" />
       </Box>
-      <Box mt={4}>
-        hehessss
-        {/* <TablePagination
-          pageSize={10}
-          pageOptions={[5, 10, 15, 20]}
-          pageIndex={0}
-          pageCount={table.getPageCount()}
-          nextPage={table.nextPage}
-          previousPage={table.previousPage}
-          gotoPage={table.setPageIndex}
-          canNextPage={table.getCanNextPage()}
-          canPreviousPage={table.getCanPreviousPage()}
-          setPageSize={() => console.log("Set")}
-        /> */}
-      </Box>
-    </Box>
-  );
-};
-
-export default ContentDetailTable;
-
-{
-  /* <TableContainer>
+      <Box sx={{ overflowX: "scroll", mt: 20 }}>
+        <TableContainer>
           <Table variant="simple">
             <Thead>
               <Tr>
@@ -193,5 +170,24 @@ export default ContentDetailTable;
               ))}
             </Tbody>
           </Table>
-        </TableContainer> */
-}
+        </TableContainer>
+      </Box>
+      <Box>
+        <TablePagination
+          pageSize={10}
+          pageOptions={[5, 10, 15, 20]}
+          pageIndex={0}
+          pageCount={table.getPageCount()}
+          nextPage={table.nextPage}
+          previousPage={table.previousPage}
+          gotoPage={table.setPageIndex}
+          canNextPage={table.getCanNextPage()}
+          canPreviousPage={table.getCanPreviousPage()}
+          setPageSize={() => console.log("Set")}
+        />
+      </Box>
+    </Card>
+  );
+};
+
+export default ContentTable;
