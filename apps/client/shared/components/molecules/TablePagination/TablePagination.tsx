@@ -69,11 +69,11 @@ const TablePagination: FC<ITablePaginationProps> = ({
         <Text flexShrink="0" mr={8}>
           Page{" "}
           <Text fontWeight="bold" as="span">
-            {pageIndex + 1}
+            {pageIndex}
           </Text>{" "}
           of{" "}
           <Text fontWeight="bold" as="span">
-            {pageOptions.length}
+            {pageCount}
           </Text>
         </Text>
         <Text flexShrink="0">Go to page:</Text>{" "}

@@ -1,4 +1,4 @@
-import { Controller, Get, Param } from '@nestjs/common';
+import { Controller, Get, Param, Query } from '@nestjs/common';
 import { ContentPostResponseService } from './content-post-response.service';
 
 @Controller('content-post-repsonse')
@@ -8,7 +8,15 @@ export class ContentPostResponseController {
   ) {}
 
   @Get(':id')
-  getContentPostWithResponses(@Param('id') id: string) {
-    return this.contentPostResponseService.getContentResponses(id);
+  getContentPostWithResponses(
+    @Param('id') id: string,
+    @Query('page') page: number,
+    @Query('pageSize') pageSize: number,
+  ) {
+    return this.contentPostResponseService.getContentResponses({
+      id,
+      page,
+      pageSize,
+    });
   }
 }

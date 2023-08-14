@@ -10,9 +10,6 @@ const TaskViews = () => {
   const { data: tasks, isLoading } = useGetTasksQuery({});
 
   const onClickAnalyze = () => router.push("/dashboard/sentiment/analysis");
-
-  console.log(tasks);
-
   const parsedTasks = useMemo(() => {
     if (!tasks?.data) return [];
 
@@ -46,28 +43,10 @@ const TaskViews = () => {
             />
           </Box>
         )}
-        {parsedTasks.length > 0 && <TaskTable data={parsedTasks} />}
-      </Card>
-      {/* <Card p={4}>
-      
-       
-      </Card>
-      <Card mt={5}>
-        {isLoading ? (
-          <div>Loading</div>
-        ) : [].length === 0 ? (
-          <Box height={500} display="flex" justifyContent="center">
-            <EmptyData
-              title="No Running Tasks"
-              subtitle="Analyze some content, to start a task"
-            />
-          </Box>
-        ) : (
-          <div>
-            <TaskTable data={[]} />
-          </div>
+        {parsedTasks.length > 0 && (
+          <TaskTable paginationData={tasks.meta} data={parsedTasks} />
         )}
-      </Card> */}
+      </Card>
     </Box>
   );
 };

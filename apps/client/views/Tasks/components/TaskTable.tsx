@@ -20,6 +20,7 @@ import {
   getCoreRowModel,
   getSortedRowModel,
 } from "@tanstack/react-table";
+import { IPaginationData } from "@client/shared/types";
 import { TablePagination } from "@client/shared/components/molecules/TablePagination";
 import { ColumnDef, createColumnHelper } from "@tanstack/react-table";
 import YoutubeLogo from "@client/public/logos/youtube-logo.png";
@@ -77,9 +78,10 @@ export const userColumnDefs: ColumnDef<ITableRow, any>[] = [
 
 interface ITaskTableProps {
   data: any;
+  paginationData: IPaginationData;
 }
 
-const TaskTable: FC<ITaskTableProps> = ({ data }) => {
+const TaskTable: FC<ITaskTableProps> = ({ data, paginationData }) => {
   const [sorting, setSorting] = useState<any>([]);
   const table = useReactTable({
     columns: userColumnDefs,
@@ -100,81 +102,83 @@ const TaskTable: FC<ITaskTableProps> = ({ data }) => {
   const rows = table.getRowModel().rows;
 
   return (
-    <Box
-      sx={{
-        height: "100%",
-        display: "flex",
-        justifyContent: "space-between",
-        flexDirection: "column",
-      }}
-    >
-      <Box>
-        <Box sx={{ mt: 5, mb: 5, px: 4 }}>
-          <Input placeholder="Search" />
-        </Box>
-        <TableContainer>
-          <Table variant="simple">
-            <Thead>
-              <Tr>
-                {headers.map((header) => {
-                  const direction = header.column.getIsSorted();
-                  const arrow: any = {
-                    asc: "🔼",
-                    desc: "🔽",
-                  };
-                  const sort_indicator = direction && arrow[direction];
-                  return (
-                    <Th key={header.id}>
-                      {header.isPlaceholder ? null : (
-                        <div
-                          onClick={header.column.getToggleSortingHandler()}
-                          className="cursor-pointer flex gap-4"
-                        >
-                          {flexRender(
-                            header.column.columnDef.header,
-                            header.getContext()
-                          )}
-                          {direction && <span>{sort_indicator}</span>}
-                        </div>
-                      )}
-                    </Th>
-                  );
-                })}
-              </Tr>
-            </Thead>
-            <Tbody>
-              {rows.map((row) => (
-                <Tr key={row.id}>
-                  {row.getVisibleCells().map((cell, index) => {
-                    return index === 0 ? (
-                      <Th key={cell.id}>
-                        {flexRender(
-                          cell.column.columnDef.cell,
-                          cell.getContext()
+    <Box>
+      <Box
+        sx={{
+          display: "flex",
+          overflow: "hidden",
+          overflowY: "auto",
+          justifyContent: "space-between",
+          flexDirection: "column",
+        }}
+      >
+        <Box>
+          <Box sx={{ mt: 5, mb: 5, px: 4 }}>
+            <Input placeholder="Search" />
+          </Box>
+          <TableContainer>
+            <Table variant="simple">
+              <Thead>
+                <Tr>
+                  {headers.map((header) => {
+                    const direction = header.column.getIsSorted();
+                    const arrow: any = {
+                      asc: "🔼",
+                      desc: "🔽",
+                    };
+                    const sort_indicator = direction && arrow[direction];
+                    return (
+                      <Th key={header.id}>
+                        {header.isPlaceholder ? null : (
+                          <div
+                            onClick={header.column.getToggleSortingHandler()}
+                            className="cursor-pointer flex gap-4"
+                          >
+                            {flexRender(
+                              header.column.columnDef.header,
+                              header.getContext()
+                            )}
+                            {direction && <span>{sort_indicator}</span>}
+                          </div>
                         )}
                       </Th>
-                    ) : (
-                      <Td key={cell.id}>
-                        {flexRender(
-                          cell.column.columnDef.cell,
-                          cell.getContext()
-                        )}
-                      </Td>
                     );
                   })}
                 </Tr>
-              ))}
-            </Tbody>
-          </Table>
-        </TableContainer>
+              </Thead>
+              <Tbody>
+                {rows.map((row) => (
+                  <Tr key={row.id}>
+                    {row.getVisibleCells().map((cell, index) => {
+                      return index === 0 ? (
+                        <Th key={cell.id}>
+                          {flexRender(
+                            cell.column.columnDef.cell,
+                            cell.getContext()
+                          )}
+                        </Th>
+                      ) : (
+                        <Td key={cell.id}>
+                          {flexRender(
+                            cell.column.columnDef.cell,
+                            cell.getContext()
+                          )}
+                        </Td>
+                      );
+                    })}
+                  </Tr>
+                ))}
+              </Tbody>
+            </Table>
+          </TableContainer>
+        </Box>
       </Box>
-
       <Box mt={4}>
         <TablePagination
-          pageSize={10}
+          pageSize={paginationData.perPage}
           pageOptions={[5, 10, 15, 20]}
-          pageIndex={0}
-          pageCount={table.getPageCount()}
+          pageIndex={paginationData.currentPage}
+          pageCount={paginationData.total}
           nextPage={table.nextPage}
           previousPage={table.previousPage}
           gotoPage={table.setPageIndex}
