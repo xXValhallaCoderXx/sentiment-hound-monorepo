@@ -6,6 +6,17 @@ import { PrismaService } from '../prisma/prisma.service';
 export class ResponseRepository {
   constructor(private prisma: PrismaService) {}
 
+  async findAll(params: {
+    where?: Prisma.ResponseWhereInput;
+    include?: Prisma.ResponseInclude;
+  }): Promise<Response[]> {
+    const { where, include } = params;
+    return await this.prisma.response.findMany({
+      where,
+      include,
+    });
+  }
+
   async create(params: {
     data: Prisma.ResponseCreateInput;
   }): Promise<Response> {
