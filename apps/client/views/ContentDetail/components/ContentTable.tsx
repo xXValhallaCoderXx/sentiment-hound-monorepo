@@ -24,15 +24,11 @@ import {
   createColumnHelper,
 } from "@tanstack/react-table";
 import { TablePagination } from "@client/shared/components/molecules/TablePagination";
+import { SENTIMENT_COLOR_MAP } from "@client/shared/constants";
 
 interface IContentTableProps {
   data: any;
 }
-const COLOR_MAP: any = {
-  positive: "green",
-  negative: "red",
-  neutral: "gray",
-};
 
 interface ITableRow {
   author: string;
@@ -68,7 +64,8 @@ export const userColumnDefs: ColumnDef<ITableRow, any>[] = [
   columnHelper.accessor((row) => row.sentiment, {
     id: "sentiment",
     cell: (info) => (
-      <Badge colorScheme={COLOR_MAP[info.getValue() ?? "neutral"]}>
+      // @ts-ignore
+      <Badge colorScheme={SENTIMENT_COLOR_MAP[info.getValue() ?? "neutral"]}>
         {info.getValue()}
       </Badge>
     ),

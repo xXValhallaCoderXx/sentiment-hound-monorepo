@@ -17,6 +17,17 @@ export class ResponseRepository {
     });
   }
 
+  async findOne(params: {
+    where: Prisma.ResponseWhereUniqueInput;
+    include?: Prisma.ResponseInclude;
+  }): Promise<Response | null> {
+    const { where, include } = params;
+    return await this.prisma.response.findUnique({
+      where,
+      include,
+    });
+  }
+
   async create(params: {
     data: Prisma.ResponseCreateInput;
   }): Promise<Response> {

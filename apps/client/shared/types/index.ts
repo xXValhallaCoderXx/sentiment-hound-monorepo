@@ -6,3 +6,11 @@ export interface IPaginationData {
   prev: any;
   total: number;
 }
+
+export interface ISentimentType {
+  positive: string;
+  negative: string;
+  neutral: string;
+}
+
+export type ISentiment = "neutral" | "positive" | "negative";

@@ -1,14 +1,13 @@
 import { FC } from "react";
-import { SENTIMENT_COLOR_MAP } from "@client/shared/constants";
 import {
   TableContainer,
   Table,
+  TableCaption,
   Thead,
   Tr,
   Th,
   Td,
   Tbody,
-  Badge,
   Box,
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
@@ -21,10 +20,10 @@ interface IRecentResponse {
 }
 
 interface ITableRecentResponseProps {
-  data: IRecentResponse[] | [];
+  data: IRecentResponse[];
 }
 
-const TableRecentSentiment: FC<ITableRecentResponseProps> = ({ data }) => {
+const TableRecentAspects: FC<ITableRecentResponseProps> = ({ data }) => {
   const router = useRouter();
   const handleOnClickAnalyze = () => {
     router.push("/dashboard/sentiment/analysis");
@@ -46,11 +45,16 @@ const TableRecentSentiment: FC<ITableRecentResponseProps> = ({ data }) => {
   return (
     <TableContainer>
       <Table variant="simple">
+        {data.length > 0 && (
+          <TableCaption>
+            Click here to view your sentiment analysis history
+          </TableCaption>
+        )}
         <Thead>
           <Tr>
             <Th>Platform</Th>
-            <Th isNumeric>Sentiment</Th>
             <Th>Comment</Th>
+            <Th isNumeric>Sentiment</Th>
           </Tr>
         </Thead>
         <Tbody>
@@ -58,13 +62,8 @@ const TableRecentSentiment: FC<ITableRecentResponseProps> = ({ data }) => {
             data?.map((response, index) => (
               <Tr key={index}>
                 <Td>{response.platform}</Td>
-                <Td>
-                  {/* @ts-ignore */}
-                  <Badge colorScheme={SENTIMENT_COLOR_MAP[response.sentiment]}>
-                    {response.sentiment}
-                  </Badge>
-                </Td>
                 <Td>{response.comment}</Td>
+                <Td>{response.sentiment}</Td>
               </Tr>
             ))}
         </Tbody>
@@ -73,4 +72,4 @@ const TableRecentSentiment: FC<ITableRecentResponseProps> = ({ data }) => {
   );
 };
 
-export default TableRecentSentiment;
+export default TableRecentAspects;

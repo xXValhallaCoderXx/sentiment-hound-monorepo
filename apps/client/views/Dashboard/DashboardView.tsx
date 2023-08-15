@@ -4,13 +4,30 @@ import SentimentOverview from "./components/SentimentOverview";
 import NewFeatures from "./components/NewFeatures";
 import { useDisclosure } from "@chakra-ui/react";
 import ModalRoadmap from "./components/ModalRoadmap";
+import TableRecentAspects from "./components/RecentAspects";
+import { useGetContentResponsesQuery } from "@client/shared/slices/content-responses/content-responses.api";
+import { useMemo } from "react";
+
 const DashboardView = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const { data: contentResponses } = useGetContentResponsesQuery({
+    params: {
+      size: 5,
+    },
+  });
+
+  const parseContentResponses = useMemo(() => {
+    if (contentResponses?.data?.length === 0 || !contentResponses) return [];
+
+    return contentResponses?.data?.map((response) => ({
+      platform: response.platform,
+      sentiment: response.sentiment,
+      comment: response.content,
+    }));
+  }, [contentResponses]);
+
   return (
     <Box>
-      <Text fontSize="3xl" sx={{ mb: 4 }}>
-        Dashboard
-      </Text>
       <Flex flexDirection={{ lg: "row", sm: "column" }} gap={10}>
         <Box w={{ base: "100%", md: "100%", lg: "33.3%", xl: "25%" }}>
           <Card onClick={onOpen}>
@@ -25,15 +42,16 @@ const DashboardView = () => {
       </Flex>
       <Flex mt={8} gap={10} flexDirection={{ lg: "row", sm: "column" }}>
         <Card p={4} w={{ lg: "66.6%", sm: "100%" }}>
-          <Text mb={2} fontSize="2xl">
+          <Text mb={2} fontWeight={500} fontSize="2xl">
             Recent Sentiment
           </Text>
-          <TableRecentSentiment />
+          <TableRecentSentiment data={parseContentResponses} />
         </Card>
         <Card p={4} w={{ lg: "33.3%", sm: "100%" }}>
-          <Text mb={2} fontSize="2xl">
+          <Text mb={2} fontWeight={500} fontSize="2xl">
             Aspect Overview
           </Text>
+          <TableRecentAspects data={[]} />
         </Card>
       </Flex>
       <ModalRoadmap isOpen={isOpen} onClose={onClose} />

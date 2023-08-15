@@ -1,22 +1,33 @@
 import { Controller, Get, Param, Query } from '@nestjs/common';
 import { ContentPostResponseService } from './content-post-response.service';
 
-@Controller('content-post-repsonse')
+@Controller('content-post-response')
 export class ContentPostResponseController {
   constructor(
     private readonly contentPostResponseService: ContentPostResponseService,
   ) {}
 
-  @Get(':id')
-  getContentPostWithResponses(
-    @Param('id') id: string,
+  // @Get(':id')
+  // getContentPostWithResponses(
+  //   @Param('id') id: string,
+  //   @Query('page') page: number,
+  //   @Query('pageSize') pageSize: number,
+  // ) {
+  //   return this.contentPostResponseService.getContentResponse({
+  //     id,
+  //     page,
+  //     pageSize,
+  //   });
+  // }
+
+  @Get('')
+  getContentResponsesPaginated(
     @Query('page') page: number,
-    @Query('pageSize') pageSize: number,
+    @Query('size') size: number,
   ) {
     return this.contentPostResponseService.getPaginatedContentResponses({
-      id,
       page,
-      pageSize,
+      pageSize: size,
     });
   }
 }
