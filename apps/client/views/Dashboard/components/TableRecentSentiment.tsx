@@ -1,5 +1,7 @@
 import { FC } from "react";
+import Image from "next/image";
 import { SENTIMENT_COLOR_MAP } from "@client/shared/constants";
+import { capitalize } from "@client/shared/utils/string-manipulation";
 import {
   TableContainer,
   Table,
@@ -9,9 +11,11 @@ import {
   Td,
   Tbody,
   Badge,
+  Text,
   Box,
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
+import { PLATFORM_ICON_IMAGE } from "@client/shared/constants";
 import { EmptyData } from "@client/shared/components/molecules/EmptyData";
 
 interface IRecentResponse {
@@ -57,10 +61,27 @@ const TableRecentSentiment: FC<ITableRecentResponseProps> = ({ data }) => {
           {data?.length > 0 &&
             data?.map((response, index) => (
               <Tr key={index}>
-                <Td>{response.platform}</Td>
                 <Td>
-                  {/* @ts-ignore */}
-                  <Badge colorScheme={SENTIMENT_COLOR_MAP[response.sentiment]}>
+                  <Box display="flex" gap={2} alignItems="center">
+                    <Image
+                      alt="logo-image"
+                      // @ts-ignore
+                      src={PLATFORM_ICON_IMAGE[response.platform]}
+                      width={20}
+                      height={20}
+                    />
+                    <Text fontWeight={400}>
+                      {capitalize(response.platform)}
+                    </Text>
+                  </Box>
+                </Td>
+                <Td>
+                  <Badge
+                    rounded={4}
+                    py={0.5}
+                    // @ts-ignore
+                    colorScheme={SENTIMENT_COLOR_MAP[response.sentiment]}
+                  >
                     {response.sentiment}
                   </Badge>
                 </Td>

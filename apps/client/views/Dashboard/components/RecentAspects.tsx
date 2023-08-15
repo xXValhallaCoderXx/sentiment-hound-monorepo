@@ -30,7 +30,7 @@ const TableRecentAspects: FC<ITableRecentResponseProps> = ({ data }) => {
   };
   if (data.length === 0) {
     return (
-      <Box sx={{ height: 200, display: "flex", justifyContent: "center" }}>
+      <Box sx={{ height: "100%", display: "flex", justifyContent: "center" }}>
         <EmptyData
           title="No Processed Tasks"
           subtitle="Analyze some content, to start a task"

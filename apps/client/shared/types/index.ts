@@ -13,4 +13,11 @@ export interface ISentimentType {
   neutral: string;
 }
 
+export interface IPlatform {
+  youtube: string;
+  twitter: string;
+  facebook: string;
+  instagram: string;
+}
+
 export type ISentiment = "neutral" | "positive" | "negative";

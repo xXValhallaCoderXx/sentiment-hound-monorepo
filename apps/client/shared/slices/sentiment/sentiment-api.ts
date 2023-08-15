@@ -13,7 +13,14 @@ const analysisApi = rootApi.injectEndpoints({
       }),
       providesTags: ["sentiment"],
     }),
+    getSentimentTotal: builder.query<any, any>({
+      query: () => ({
+        url: "/content-post-response/sentiment",
+        method: "GET",
+      }),
+      providesTags: ["sentiment"],
+    }),
   }),
 });
 
-export const { useGetSentimentQuery } = analysisApi;
+export const { useGetSentimentQuery, useGetSentimentTotalQuery } = analysisApi;
