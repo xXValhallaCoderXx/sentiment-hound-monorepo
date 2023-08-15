@@ -30,4 +30,9 @@ export class ContentPostResponseController {
       pageSize: size,
     });
   }
+
+  @Get('sentiment')
+  getTotalSentiment() {
+    return this.contentPostResponseService.getTotalSentiment();
+  }
 }

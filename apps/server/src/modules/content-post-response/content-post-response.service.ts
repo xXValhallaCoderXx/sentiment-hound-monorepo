@@ -26,17 +26,21 @@ export class ContentPostResponseService {
     private responseRepository: ResponseRepository,
     private prisma: PrismaService,
   ) {}
-  // async getContentResponse(data: IGetContentResponseParams) {
-  //   const { id } = data;
-  //   const result = await this.responseRepository.findOne({
-  //     // @ts-ignore
-  //     where: {
-  //       contentPostId: id,
-  //     },
-  //   });
+  async getTotalSentiment() {
+    const result = await this.responseRepository.findAll({});
 
-  //   return result;
-  // }
+    const sentimentCounts: any = {
+      positive: 0,
+      negative: 0,
+      neutral: 0,
+    };
+
+    // @ts-ignore
+    result.forEach((response: any) => {
+      sentimentCounts[response.sentiment]++;
+    });
+    return sentimentCounts;
+  }
 
   async getPaginatedContentResponses(data: IGetContentResponsesParams) {
     console.log('DATA: ', data);
