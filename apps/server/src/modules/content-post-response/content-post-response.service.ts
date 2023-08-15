@@ -1,11 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { ResponseRepository } from './content-post-response.repository';
 import { Prisma } from '.prisma/client';
-import {
-  paginator,
-  PaginatedResult,
-  PaginateFunction,
-} from '../prisma/prisma.paginator';
+import { paginator, PaginateFunction } from '../prisma/prisma.paginator';
 import { PrismaService } from '../prisma/prisma.service';
 
 interface IGetContentResponsesParams {
@@ -22,7 +18,7 @@ export class ContentPostResponseService {
     private responseRepository: ResponseRepository,
     private prisma: PrismaService,
   ) {}
-  async getContentResponses(data: IGetContentResponsesParams) {
+  async getPaginatedContentResponses(data: IGetContentResponsesParams) {
     const paginate: PaginateFunction = paginator({
       perPage: data.pageSize ?? 5,
     });
@@ -40,9 +36,5 @@ export class ContentPostResponseService {
         page: page ?? 1,
       },
     );
-    // const results = await this.responseRepository.findAll({
-    //   where: { contentPostId: id },
-    // });
-    // return results;
   }
 }

@@ -7,7 +7,7 @@ export class ContentPostController {
 
   @Get()
   getAllContentPostsWithSentiment(): any {
-    return this.contentPostService.getContentPostWithSentiment();
+    return this.contentPostService.getPaginatedConentPosts({});
   }
 
   @Get(':id')

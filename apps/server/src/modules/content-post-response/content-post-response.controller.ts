@@ -13,7 +13,7 @@ export class ContentPostResponseController {
     @Query('page') page: number,
     @Query('pageSize') pageSize: number,
   ) {
-    return this.contentPostResponseService.getContentResponses({
+    return this.contentPostResponseService.getPaginatedContentResponses({
       id,
       page,
       pageSize,

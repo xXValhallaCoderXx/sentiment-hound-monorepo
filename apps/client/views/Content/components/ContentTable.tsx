@@ -8,8 +8,9 @@ import {
   Thead,
   Box,
   Tbody,
-  Td,
+  Badge,
   Text,
+  Td,
 } from "@chakra-ui/react";
 import Image from "next/image";
 import {
@@ -19,17 +20,14 @@ import {
   getCoreRowModel,
   getSortedRowModel,
 } from "@tanstack/react-table";
+import { IPaginationData } from "@client/shared/types";
 import { TablePagination } from "@client/shared/components/molecules/TablePagination";
 import { ColumnDef, createColumnHelper } from "@tanstack/react-table";
 import YoutubeLogo from "@client/public/logos/youtube-logo.png";
 import TwitterLogo from "@client/public/logos/twitter-logo.png";
-import { useRouter } from "next/router";
-
-interface IContentPostTableProps {
-  data: any;
-}
 
 interface ITableRow {
+  status: string;
   platform: string;
   count: string;
   title: string;
@@ -51,7 +49,6 @@ export const userColumnDefs: ColumnDef<ITableRow, any>[] = [
         <Text fontSize="xs">{info.getValue()}</Text>
       </Box>
     ),
-    // header: () => <span>Last Name</span>,
   }),
   columnHelper.accessor((row) => row.title, {
     id: "title",
@@ -64,10 +61,13 @@ export const userColumnDefs: ColumnDef<ITableRow, any>[] = [
     footer: (info) => info.column.id,
   }),
 ];
+interface ITaskTableProps {
+  data: any;
+  paginationData: IPaginationData;
+}
 
-const ContentPostTable: FC<IContentPostTableProps> = ({ data }) => {
+const TaskTable: FC<ITaskTableProps> = ({ data, paginationData }) => {
   const [sorting, setSorting] = useState<any>([]);
-  const router = useRouter();
   const table = useReactTable({
     columns: userColumnDefs,
     data,
@@ -86,19 +86,14 @@ const ContentPostTable: FC<IContentPostTableProps> = ({ data }) => {
   const headers = table.getFlatHeaders();
   const rows = table.getRowModel().rows;
 
-  const handleOnClickRow = (_row: any) => () => {
-    console.log("ROW: ", _row);
-    router.push(`/dashboard/sentiment/content/${_row.id}`);
-  };
-
   return (
-    <Box sx={{ height: "100%" }}>
+    <Box style={{ height: "100%" }}>
       <Box
         sx={{
           display: "flex",
-          height: "100%",
           overflow: "hidden",
           overflowY: "auto",
+          height: "100%",
           justifyContent: "space-between",
           flexDirection: "column",
         }}
@@ -139,7 +134,7 @@ const ContentPostTable: FC<IContentPostTableProps> = ({ data }) => {
               </Thead>
               <Tbody>
                 {rows.map((row) => (
-                  <Tr key={row.id} onClick={handleOnClickRow(row?.original)}>
+                  <Tr key={row.id}>
                     {row.getVisibleCells().map((cell, index) => {
                       return index === 0 ? (
                         <Th key={cell.id}>
@@ -163,23 +158,23 @@ const ContentPostTable: FC<IContentPostTableProps> = ({ data }) => {
             </Table>
           </TableContainer>
         </Box>
-      </Box>
-      <Box mt={4}>
-        <TablePagination
-          pageSize={10}
-          pageOptions={[5, 10, 15, 20]}
-          pageIndex={0}
-          pageCount={table.getPageCount()}
-          nextPage={table.nextPage}
-          previousPage={table.previousPage}
-          gotoPage={table.setPageIndex}
-          canNextPage={table.getCanNextPage()}
-          canPreviousPage={table.getCanPreviousPage()}
-          setPageSize={() => console.log("Set")}
-        />
+        <Box mt={4}>
+          <TablePagination
+            pageSize={paginationData.perPage}
+            pageOptions={[5, 10, 15, 20]}
+            pageIndex={paginationData.currentPage}
+            pageCount={paginationData.total}
+            nextPage={table.nextPage}
+            previousPage={table.previousPage}
+            gotoPage={table.setPageIndex}
+            canNextPage={table.getCanNextPage()}
+            canPreviousPage={table.getCanPreviousPage()}
+            setPageSize={() => console.log("Set")}
+          />
+        </Box>
       </Box>
     </Box>
   );
 };
 
-export default ContentPostTable;
+export default TaskTable;
