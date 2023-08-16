@@ -13,11 +13,12 @@ const ContentPageView = () => {
     if (!content) return [];
 
     const parsedTasks = content?.data?.map((task: any) => ({
+      id: task?.id,
       platform: task?.platform,
       title: task?.title,
       description: task?.description,
       author: task?.author,
-      count: 1,
+      count: task?.count,
     }));
     return parsedTasks;
   }, [content]);

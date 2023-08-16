@@ -25,8 +25,10 @@ import { TablePagination } from "@client/shared/components/molecules/TablePagina
 import { ColumnDef, createColumnHelper } from "@tanstack/react-table";
 import YoutubeLogo from "@client/public/logos/youtube-logo.png";
 import TwitterLogo from "@client/public/logos/twitter-logo.png";
+import { useRouter } from "next/router";
 
 interface ITableRow {
+  id: string;
   status: string;
   platform: string;
   count: string;
@@ -68,6 +70,7 @@ interface ITaskTableProps {
 
 const TaskTable: FC<ITaskTableProps> = ({ data, paginationData }) => {
   const [sorting, setSorting] = useState<any>([]);
+  const router = useRouter();
   const table = useReactTable({
     columns: userColumnDefs,
     data,
@@ -85,6 +88,10 @@ const TaskTable: FC<ITaskTableProps> = ({ data, paginationData }) => {
 
   const headers = table.getFlatHeaders();
   const rows = table.getRowModel().rows;
+
+  const handleOnClickRow = (_id: string) => () => {
+    router.push(`/dashboard/sentiment/content/${_id}`);
+  };
 
   return (
     <Box style={{ height: "100%" }}>
@@ -134,7 +141,10 @@ const TaskTable: FC<ITaskTableProps> = ({ data, paginationData }) => {
               </Thead>
               <Tbody>
                 {rows.map((row) => (
-                  <Tr key={row.id}>
+                  <Tr
+                    key={row.id}
+                    onClick={handleOnClickRow(row?.original?.id)}
+                  >
                     {row.getVisibleCells().map((cell, index) => {
                       return index === 0 ? (
                         <Th key={cell.id}>

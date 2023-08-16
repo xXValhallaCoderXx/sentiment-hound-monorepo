@@ -11,6 +11,7 @@ import { PrismaService } from '../prisma/prisma.service';
 
 interface IGetContentResponsesParams {
   where?: Prisma.ContentPostWhereInput;
+
   orderBy?: Prisma.ContentPostOrderByWithRelationInput;
   pageSize?: number;
   page?: number;
@@ -31,16 +32,31 @@ export class ContentPostService {
       perPage: data.pageSize ?? 5,
     });
     const { where, orderBy, page } = data;
-    return paginate(
+    const results = await paginate(
       this.prisma.contentPost,
       {
         where,
+        include: { responses: true },
         orderBy,
       },
       {
         page: page ?? 1,
       },
     );
+
+    results.data.forEach((contentPost) => {
+      // @ts-ignore
+      if (contentPost?.responses?.length > 0) {
+        // @ts-ignore
+        contentPost.count = contentPost.responses.length;
+      } else {
+        // @ts-ignore
+        contentPost.count = 0;
+      }
+      // @ts-ignore
+      delete contentPost.responses;
+    });
+    return results;
   }
 
   async getContentPostWithResponses(id: string) {
