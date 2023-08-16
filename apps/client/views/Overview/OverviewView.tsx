@@ -10,7 +10,7 @@ import {
 } from "@chakra-ui/react";
 import FilterOverview from "./components/Filter";
 import GraphTab from "./tabs/GraphTab";
-import TableTab from "./tabs/TableTab";
+import TableTab from "./tabs/Table/TableTab";
 import { EmptyData } from "@client/shared/components/molecules/EmptyData";
 import { useGetSentimentQuery } from "@client/shared/slices/sentiment/sentiment-api";
 
@@ -49,7 +49,10 @@ const OverviewView = () => {
 
               <TabPanels>
                 <TabPanel>
-                  <TableTab />
+                  <TableTab
+                    data={data?.data ?? []}
+                    paginationData={data?.meta ?? {}}
+                  />
                 </TabPanel>
                 <TabPanel>
                   <GraphTab />

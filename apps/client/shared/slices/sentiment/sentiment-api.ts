@@ -1,14 +1,16 @@
 import { rootApi } from "../root-api";
+import { IContentResponse } from "../content-responses/content-response.types";
 
 interface IGetAnalysisParams {
-  sentiment?: string[];
+  data: IContentResponse[];
+  meta: any;
 }
 
 const analysisApi = rootApi.injectEndpoints({
   endpoints: (builder) => ({
     getSentiment: builder.query<IGetAnalysisParams, any>({
       query: ({ videoId }) => ({
-        url: "/sentiment",
+        url: "/content-post-response",
         method: "GET",
       }),
       providesTags: ["sentiment"],
