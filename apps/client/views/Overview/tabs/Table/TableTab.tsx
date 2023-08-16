@@ -178,12 +178,12 @@ const TableTab: FC<ITableTabProps> = ({ data = [], paginationData }) => {
             pageSize={paginationData.perPage}
             pageOptions={[5, 10, 15, 20]}
             pageIndex={paginationData.currentPage}
-            pageCount={paginationData.total}
+            pageCount={paginationData.lastPage}
             nextPage={table.nextPage}
             previousPage={table.previousPage}
             gotoPage={table.setPageIndex}
-            canNextPage={table.getCanNextPage()}
-            canPreviousPage={table.getCanPreviousPage()}
+            canNextPage={paginationData?.next}
+            canPreviousPage={paginationData?.prev}
             setPageSize={() => console.log("Set")}
           />
         </Box>

@@ -23,6 +23,9 @@ const FilterOverview = () => {
         <MultiSelect
           title="Sentiment"
           options={["Positive", "Negative", "Neutral"]}
+          onChange={(e) => {
+            console.log(e);
+          }}
         />
       </Box>
       <Box maxW="200px">
