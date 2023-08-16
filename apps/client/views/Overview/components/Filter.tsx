@@ -1,25 +1,33 @@
-import { useState } from "react";
-import { Select, Box, Text } from "@chakra-ui/react";
+import { FC, useEffect, useState } from "react";
+import { Select, Box, Text, Input } from "@chakra-ui/react";
 import { RangeDatepicker } from "chakra-dayzed-datepicker";
 import { MultiSelect } from "@client/shared/components/molecules/MultiSelect";
 
-const FilterOverview = () => {
+interface IFilterOverviewProps {
+  onChange: any;
+}
+
+const FilterOverview: FC<IFilterOverviewProps> = ({ onChange }) => {
   const [selectedDates, setSelectedDates] = useState<Date[]>([
     new Date(),
     new Date(),
   ]);
+
+  useEffect(() => {
+    onChange({
+      date: selectedDates,
+    });
+  }, [selectedDates]);
+
   return (
     <Box display="flex" gap={6}>
-      <Box maxW="200px">
-        <Text fontSize="sm" mb={1}>
-          Platform
-        </Text>
+      <Box width="300px" display="flex" alignItems="flex-end" maxW="300px">
+        <Input placeholder="Search content name..." />
+      </Box>
+      <Box maxW="200px" display="flex" alignItems="flex-end">
         <MultiSelect title="Platforms" options={["Youtube", "Twitter"]} />
       </Box>
-      <Box maxW="200px">
-        <Text fontSize="sm" mb={1}>
-          Sentiment
-        </Text>
+      <Box maxW="200px" display="flex" alignItems="flex-end">
         <MultiSelect
           title="Sentiment"
           options={["Positive", "Negative", "Neutral"]}
@@ -28,20 +36,8 @@ const FilterOverview = () => {
           }}
         />
       </Box>
-      <Box maxW="200px">
-        <Text fontSize="sm" mb={1}>
-          Aspects
-        </Text>
-        <MultiSelect
-          title="Aspects"
-          options={["Gameplay", "Lag", "Weapon Handling"]}
-        />
-      </Box>
 
       <Box>
-        <Text fontSize="sm" mb={1}>
-          Date Range
-        </Text>
         <RangeDatepicker
           selectedDates={selectedDates}
           onDateChange={setSelectedDates}

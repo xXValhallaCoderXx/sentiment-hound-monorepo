@@ -18,6 +18,8 @@ const OverviewView = () => {
   const { data, isLoading } = useGetSentimentQuery({});
   console.log("SENTIMENT: ", data);
   const parsedTasks = ["ss"];
+
+  const handleOnFilterChange = (_data: any) => console.log("DATA: ", _data);
   return (
     <Box height="calc(100vh - 140px)">
       <Card p={4} sx={{ height: "100%" }}>
@@ -39,8 +41,8 @@ const OverviewView = () => {
           </Box>
         )}
         {parsedTasks.length > 0 && (
-          <Box mt={4} p={4}>
-            <FilterOverview />
+          <Box mt={1} p={4}>
+            <FilterOverview onChange={handleOnFilterChange} />
             <Tabs sx={{ mt: 6 }}>
               <TabList>
                 <Tab>Grid</Tab>

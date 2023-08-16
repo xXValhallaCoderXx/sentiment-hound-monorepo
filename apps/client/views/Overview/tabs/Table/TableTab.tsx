@@ -114,9 +114,6 @@ const TableTab: FC<ITableTabProps> = ({ data = [], paginationData }) => {
         }}
       >
         <Box>
-          <Box sx={{ mt: 5, mb: 5, px: 4 }}>
-            <Input placeholder="Search" />
-          </Box>
           <TableContainer>
             <Table variant="simple">
               <Thead>
