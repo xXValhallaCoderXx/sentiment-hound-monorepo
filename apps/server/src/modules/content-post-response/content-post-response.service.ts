@@ -18,6 +18,9 @@ interface IGetContentResponsesParams {
   orderBy?: Prisma.ResponseOrderByWithRelationInput;
   pageSize?: number;
   page?: number;
+  sentiment?: string;
+  platform?: string;
+  search?: string;
 }
 
 @Injectable()
@@ -47,11 +50,35 @@ export class ContentPostResponseService {
     const paginate: PaginateFunction = paginator({
       perPage: data.pageSize ?? 5,
     });
-    const { where, orderBy, page } = data;
+    const { where, orderBy, page, sentiment, platform } = data;
+    let parsedSentiment: any = [];
+    let parsedPlatforms: any = [];
+    if (sentiment) {
+      parsedSentiment = sentiment.split(',');
+    }
+    if (platform) {
+      parsedPlatforms = platform.split(',');
+    }
     return paginate(
       this.prisma.response,
       {
-        where,
+        where: {
+          ...where,
+          ...(parsedPlatforms.length > 0 && {
+            OR: parsedPlatforms?.map((platform: string) => ({
+              platform: {
+                contains: platform,
+              },
+            })),
+          }),
+          ...(parsedSentiment.length > 0 && {
+            OR: parsedSentiment?.map((sentiment: string) => ({
+              sentiment: {
+                contains: sentiment,
+              },
+            })),
+          }),
+        },
         orderBy,
       },
       {

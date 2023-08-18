@@ -102,13 +102,13 @@ const TableTab: FC<ITableTabProps> = ({ data = [], paginationData }) => {
   const rows = table.getRowModel().rows;
 
   return (
-    <Box style={{ height: "100%" }}>
+    <Box>
       <Box
         sx={{
           display: "flex",
           overflow: "hidden",
           overflowY: "auto",
-          height: "100%",
+
           justifyContent: "space-between",
           flexDirection: "column",
         }}
@@ -172,7 +172,7 @@ const TableTab: FC<ITableTabProps> = ({ data = [], paginationData }) => {
         </Box>
         <Box mt={4}>
           <TablePagination
-            pageSize={paginationData.perPage}
+            pageSize={10}
             pageOptions={[5, 10, 15, 20]}
             pageIndex={paginationData.currentPage}
             pageCount={paginationData.lastPage}

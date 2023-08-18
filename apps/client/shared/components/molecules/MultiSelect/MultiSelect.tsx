@@ -16,9 +16,14 @@ import {
 import { FaCaretDown, FaFilter, FaCandyCane } from "react-icons/fa";
 import { GrFormClose } from "react-icons/gr";
 
+interface IOption {
+  value: string;
+  label: string;
+}
+
 interface IMultiSelectProps {
   title: string;
-  options: any[];
+  options: IOption[];
   onChange?: (selected: any) => void;
 }
 
@@ -100,15 +105,15 @@ const MultiSelect: React.FC<IMultiSelectProps> = ({
 
               <Divider />
 
-              {options.map((option: any) => (
+              {options.map((option) => (
                 <MenuItemOption
-                  key={option}
-                  value={option}
+                  key={option.value}
+                  value={option.value}
                   _focus={{ bg: "red.100" }}
                   _hover={{ bg: "red.100" }}
                   transition={"background 0.3s ease"}
                 >
-                  {option}
+                  {option.label}
                 </MenuItemOption>
               ))}
             </MenuOptionGroup>

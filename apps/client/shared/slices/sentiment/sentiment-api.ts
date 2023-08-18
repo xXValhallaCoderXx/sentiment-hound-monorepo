@@ -6,13 +6,25 @@ interface IGetAnalysisParams {
   meta: any;
 }
 
+interface IGetSentimentParams {
+  sentiment?: string[];
+  date?: string;
+  platform?: string[];
+  page?: number;
+  size?: number;
+}
+
 const analysisApi = rootApi.injectEndpoints({
   endpoints: (builder) => ({
-    getSentiment: builder.query<IGetAnalysisParams, any>({
-      query: ({ videoId }) => ({
-        url: "/content-post-response",
-        method: "GET",
-      }),
+    getSentiment: builder.query<IGetAnalysisParams, IGetSentimentParams>({
+      query: (params) => {
+        console.log("PARAMS : ", params);
+        return {
+          url: "/content-post-response",
+          method: "GET",
+          params,
+        };
+      },
       providesTags: ["sentiment"],
     }),
     getSentimentTotal: builder.query<any, any>({
@@ -25,4 +37,8 @@ const analysisApi = rootApi.injectEndpoints({
   }),
 });
 
-export const { useGetSentimentQuery, useGetSentimentTotalQuery } = analysisApi;
+export const {
+  useGetSentimentQuery,
+  useGetSentimentTotalQuery,
+  useLazyGetSentimentQuery,
+} = analysisApi;

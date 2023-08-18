@@ -24,10 +24,12 @@ export class ContentPostResponseController {
   getContentResponsesPaginated(
     @Query('page') page: number,
     @Query('size') size: number,
+    @Query('sentiment') sentiment: string,
   ) {
     return this.contentPostResponseService.getPaginatedContentResponses({
       page,
       pageSize: size,
+      sentiment,
     });
   }
 

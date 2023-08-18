@@ -12,3 +12,15 @@ export const PLATFORM_ICON_IMAGE: IPlatform = {
   instagram: "https://img.icons8.com/color/48/000000/instagram-new.png",
   youtube: "https://img.icons8.com/color/48/000000/youtube-play.png",
 };
+
+
+export const PLATFORM_OPTIONS = [
+  { value: "youtube", label: "Youtube" },
+  { value: "twitter", label: "Twitter" },
+];
+
+export const SENTIMENT_OPTIONS = [
+  { value: "positive", label: "Positive" },
+  { value: "negative", label: "Negative" },
+  { value: "neutral", label: "Neutral" },
+];
