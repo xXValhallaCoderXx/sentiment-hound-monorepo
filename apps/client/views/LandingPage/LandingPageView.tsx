@@ -4,7 +4,7 @@ import SolutionsSection from "./components/SolutionsSection";
 
 const LandingPageView = () => {
   return (
-    <Box overflowX="hidden">
+    <Box>
       <HeroSection />
       <SolutionsSection />
     </Box>

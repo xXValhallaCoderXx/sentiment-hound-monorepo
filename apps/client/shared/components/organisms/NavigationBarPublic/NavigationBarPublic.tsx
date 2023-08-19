@@ -1,5 +1,3 @@
-"use client";
-
 import {
   Box,
   Flex,
@@ -16,7 +14,8 @@ import {
   useBreakpointValue,
   useDisclosure,
 } from "@chakra-ui/react";
-
+import Link from "next/link";
+import { ButtonLink } from "../../molecules/ButtonLink";
 import {
   FaChevronDown,
   FaChevronRight,
@@ -68,20 +67,24 @@ export default function WithSubnavigation() {
           direction={"row"}
           spacing={6}
         >
-          <Button
-            as={"a"}
-            display={{ base: "none", md: "inline-flex" }}
-            fontSize={"sm"}
-            fontWeight={600}
-            color={"white"}
-            bg={"primary"}
-            href={"#"}
-            _hover={{
-              bg: "red.300",
-            }}
-          >
-            Sign Up
-          </Button>
+          <ButtonLink href="/auth/sign-in" color="primary" size="sm">
+            Sign In
+          </ButtonLink>
+          {/* <Link href="/auth/sign-in" passHref>
+            <Button
+              as={"a"}
+              display={{ base: "none", md: "inline-flex" }}
+              fontSize={"sm"}
+              fontWeight={600}
+              color={"white"}
+              bg={"primary"}
+              _hover={{
+                bg: "red.300",
+              }}
+            >
+              Sign In
+            </Button>
+          </Link> */}
         </Stack>
       </Flex>
 
