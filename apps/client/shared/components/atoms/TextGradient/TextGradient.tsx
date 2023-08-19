@@ -26,12 +26,14 @@ const GradientText: FC<IGradientTextProps> = ({ children, size, color }) => {
       fontWeight="bold"
       fontSize={fontSize}
       backgroundClip="text"
-      bgGradient="linear(to-l, #7928CA, #FF0080)"
+      bgGradient="linear(to-l, #2D2D2D, #D13639)"
       color="transparent"
     >
       {children}
     </Box>
   );
 };
+
+
 
 export default GradientText;
