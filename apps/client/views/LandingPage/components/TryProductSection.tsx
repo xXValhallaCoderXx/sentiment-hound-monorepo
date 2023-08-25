@@ -8,16 +8,16 @@ import {
   Input,
   Text,
 } from "@chakra-ui/react";
+import { CircleGradient } from "@client/shared/components/atoms";
 
 const TryProductSection = () => {
   return (
     <Box display="flex" justifyContent="center">
-      <Card maxWidth={"75%"} bgColor="red.500" mt={10} mb={10} p={6}>
+      <Card maxWidth={"35%"} colorScheme="primary" mt={10} mb={10} p={6}>
         <Flex>
-          <Box flexBasis="40%">
+          <Box>
             <Heading>Interested to try out product?</Heading>
-
-            <Text>
+            <Text color="gray.500">
               Sentiment Hound is currently in closed beta. If you are interested
               in trying out our product, please fill out the form below and we
               will get back to you as soon as possible.
@@ -26,12 +26,9 @@ const TryProductSection = () => {
               <Input placeholder="Name" />
               <Button>Submit</Button>
             </Flex>
-            <Text>
+            <Text ml={2} color="gray.500" fontWeight={500}>
               Gooby eats your data, and we won't share it with anyone.
             </Text>
-          </Box>
-          <Box flexBasis="60%">
-            <Heading>Interested to try out product?</Heading>
           </Box>
         </Flex>
       </Card>

@@ -6,7 +6,11 @@ interface SquishyButtonProps extends ButtonProps {
   children: ReactNode;
 }
 
-const SquishyButton: React.FC<SquishyButtonProps> = ({ children, ...rest }) => {
+const SquishyButton: React.FC<SquishyButtonProps> = ({
+  children,
+  size = "md",
+  ...rest
+}) => {
   return (
     <motion.div
       whileHover={{ scale: 1.1 }}
@@ -14,8 +18,7 @@ const SquishyButton: React.FC<SquishyButtonProps> = ({ children, ...rest }) => {
       style={{ display: "inline-block" }}
     >
       <Button
-        size="lg"
-        colorScheme="teal"
+        size={size}
         boxShadow="md"
         borderRadius="full"
         padding="16px 24px"

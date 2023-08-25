@@ -49,7 +49,7 @@ const HeroSection = () => {
           data-driven success
         </Text>
         <Box display="flex" mt={5} justifyContent="center">
-          <SquishyButton colorScheme="red">
+          <SquishyButton colorScheme="primary" size="lg">
             Get early acceess, and let Gooby loose!
           </SquishyButton>
         </Box>
