@@ -10,23 +10,37 @@ datasource db {
   shadowDatabaseUrl = env("POSTGRES_URL_NON_POOLING") // used for migrations
 }
 
+model Task {
+  id              String    @id @default(cuid())
+  status          String
+  contentPost     ContentPost @relation(fields: [contentPostId], references: [id])
+  contentPostId   String  @unique
+}
 
 model ContentPost {
   id            String    @id @default(cuid())
   platform      String
   contentId     String
-  author        String? 
+  author        String?
+  title         String
+  description   String?
+  publishedAt   String
+  image         String?
   responses     Response[]
+  task          Task?
 }
 
 model Response {
   id            String    @id @default(cuid())
+  remoteId      String
   parentId      String?
   platform      String
   author        String? 
-  publishedAt   String?
+  publishedAt   DateTime?
+  updatedAt     DateTime?
+  likes         Int?
   content       String
-  sentiment     String
+  sentiment     String?
   contentPost   ContentPost @relation(fields: [contentPostId], references: [id])
   contentPostId String
   aspects       Aspect[]

@@ -5,16 +5,22 @@ const NewFeatures = () => {
     <Box
       bgGradient="linear(to-tr, red.500, gray.500)"
       width="100%"
-      height="70px"
+      height="100%"
       rounded="md"
       cursor={"pointer"}
-      p={2}
+      p={4}
     >
-      <Text cursor="pointer" fontSize="lg" fontWeight={600}>
+      <Text color="white" cursor="pointer" fontSize="xl" fontWeight={700}>
         {" "}
         New Upcoming Features
       </Text>
-      <Text cursor="pointer" fontSize="sm" fontWeight={400}>
+      <Text
+        color="white"
+        cursor="pointer"
+        fontSize="sm"
+        mt={1}
+        fontWeight={400}
+      >
         {" "}
         Check out whats coming soon
       </Text>

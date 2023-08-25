@@ -1,6 +1,16 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { HttpService } from '@nestjs/axios';
+import { FetchVideoCommentDTO, VideoDetailDTO } from './youtube.dto';
+
+interface IFetchAllComentsResponse {
+  data: {
+    kind: string;
+    etag: string;
+    pageInfo: { totalResults: number; resultsPerPage: number };
+    items: string[];
+  };
+}
 
 @Injectable()
 export class YoutubeService {
@@ -8,6 +18,75 @@ export class YoutubeService {
     private configService: ConfigService,
     private httpService: HttpService,
   ) {}
+
+  async fetchAllVideoComments(data: FetchVideoCommentDTO): Promise<any | null> {
+    const videoId = data.id;
+    const YOUTUBE_API_KEY = this.configService.get<string>('YOUTUBE_API_KEY');
+    const API_URL = this.configService.get<string>('YOUTUBE_BASE_API');
+
+    const url = `${API_URL}/commentThreads?key=${YOUTUBE_API_KEY}&maxResults=${
+      data.size ?? 100
+    }&part=snippet,replies&videoId=${videoId}`;
+
+    const videoCommentsResponse = await this.httpService.axiosRef.get<
+      any,
+      IFetchAllComentsResponse
+    >(url);
+    console.log('WHAT IS THIS');
+
+    return videoCommentsResponse.data;
+  }
+
+  async fetchAllVideoComments2(
+    data: FetchVideoCommentDTO,
+  ): Promise<any | null> {
+    const videoId = data.id;
+    const YOUTUBE_API_KEY = this.configService.get<string>('YOUTUBE_API_KEY');
+    const API_URL = this.configService.get<string>('YOUTUBE_BASE_API');
+
+    const comments = [];
+    let nextPageToken = null;
+
+    do {
+      const url = `${API_URL}/commentThreads?key=${YOUTUBE_API_KEY}&part=snippet,replies&videoId=${videoId}`;
+      const videoCommentsResponse: any = await this.httpService.axiosRef.get<
+        any,
+        IFetchAllComentsResponse
+      >(url, {
+        params: {
+          maxResults: data.size ?? 100,
+          pageToken: nextPageToken,
+        },
+      });
+      comments.push(...videoCommentsResponse?.data?.items);
+      nextPageToken = videoCommentsResponse?.data?.nextPageToken ?? null;
+    } while (nextPageToken);
+
+    return comments;
+  }
+
+  async fetchVideoDetails(data: FetchVideoCommentDTO): Promise<VideoDetailDTO> {
+    const videoId = data.id;
+    console.log('VIDEO ID: ', videoId);
+    const YOUTUBE_API_KEY = this.configService.get<string>('YOUTUBE_API_KEY');
+    const API_URL = this.configService.get<string>('YOUTUBE_BASE_API');
+    const videoMetaData = `${API_URL}/videos?key=${YOUTUBE_API_KEY}&part=snippet&id=${videoId}`;
+    console.log('START API ', API_URL);
+    const videoMetaResponse = await this.httpService.axiosRef.get(
+      videoMetaData,
+    );
+    console.log('VIDEO META: ', videoMetaResponse);
+    const videoDetails = videoMetaResponse.data?.items[0];
+    return {
+      id: videoDetails?.id,
+      title: videoDetails?.snippet?.title,
+      description: videoDetails?.snippet?.description,
+      publishedAt: videoDetails?.snippet?.publishedAt,
+      thumbnail: videoDetails.snippet?.thumbnails?.high,
+      author: videoDetails?.snippet?.channelTitle,
+    };
+  }
+
   async fetchVideoComments(): Promise<any | null> {
     const videoId = 'nSlodG96u4c';
 
