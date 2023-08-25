@@ -28,11 +28,11 @@ const NavItem = ({ icon, children, ...rest }: NavItemProps) => {
         my="2"
         borderRadius="lg"
         role="group"
-        bg={isActive ? "primary" : "transparent"}
+        bg={isActive ? "red.500" : "transparent"}
         color={isActive ? "white" : "gray.700"}
         cursor="pointer"
         _hover={{
-          bg: "primary",
+          bg: "red.300",
           color: "white",
         }}
         {...rest}
