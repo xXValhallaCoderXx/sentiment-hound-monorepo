@@ -8,17 +8,18 @@ import TableRecentAspects from "./components/RecentAspects";
 import { useGetSentimentTotalQuery } from "@client/shared/slices/sentiment/sentiment-api";
 import { useGetContentResponsesQuery } from "@client/shared/slices/content-responses/content-responses.api";
 import { useMemo } from "react";
+import { LoaderPage } from "@client/shared/components/molecules";
 
 const DashboardView = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const { data: sentimentTotal } = useGetSentimentTotalQuery({});
-  const { data: contentResponses } = useGetContentResponsesQuery({
-    params: {
-      size: 5,
-    },
-  });
-
-  console.log("SENTI: ", sentimentTotal);
+  const { data: sentimentTotal, isLoading: isLoadingSentimentTotals } =
+    useGetSentimentTotalQuery({});
+  const { data: contentResponses, isLoading: isLoadingContentResponse } =
+    useGetContentResponsesQuery({
+      params: {
+        size: 5,
+      },
+    });
 
   const parseContentResponses = useMemo(() => {
     if (contentResponses?.data?.length === 0 || !contentResponses) return [];
@@ -29,6 +30,10 @@ const DashboardView = () => {
       comment: response.content,
     }));
   }, [contentResponses]);
+
+  if (isLoadingSentimentTotals || isLoadingContentResponse) {
+    return <LoaderPage text="Fetching data..." />;
+  }
 
   return (
     <Box>
