@@ -25,7 +25,7 @@ const HeroSection = () => {
         right="5%"
         transform="translate(-10%, -50%)"
       >
-        <CircleGradient size={300} />
+        <CircleGradient  size={300} />
       </Box>
 
       {/* Content */}
