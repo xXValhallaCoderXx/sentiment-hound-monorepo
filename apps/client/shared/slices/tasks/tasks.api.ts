@@ -1,8 +1,15 @@
 import { rootApi } from "../root-api";
+import { ITask } from "./tasks.types";
+import { IPagination } from "../root-types";
+
+interface IGetTasksResponse {
+  data: ITask[];
+  meta: IPagination;
+}
 
 const taskApi = rootApi.injectEndpoints({
   endpoints: (builder) => ({
-    getTasks: builder.query<any, any>({
+    getTasks: builder.query<IGetTasksResponse, any>({
       query: () => ({
         url: "/task",
         method: "GET",

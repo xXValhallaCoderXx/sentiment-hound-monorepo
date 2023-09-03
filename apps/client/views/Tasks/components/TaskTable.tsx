@@ -33,6 +33,16 @@ interface ITableRow {
   title: string;
 }
 
+const SENTIMENT_MAP: any = {
+  completed: "Completed",
+  "sentiment-failed": "Sentiment Failed",
+};
+
+const SENTIMENT_COLOR_MAP: any = {
+  completed: "green",
+  "sentiment-failed": "red",
+};
+
 const columnHelper = createColumnHelper<ITableRow>();
 
 export const userColumnDefs: ColumnDef<ITableRow, any>[] = [
@@ -67,9 +77,9 @@ export const userColumnDefs: ColumnDef<ITableRow, any>[] = [
       <Badge
         sx={{ p: 1, px: 2 }}
         rounded={5}
-        colorScheme={info.getValue() === "completed" ? "green" : ""}
+        colorScheme={SENTIMENT_COLOR_MAP[info.getValue()]}
       >
-        {info.getValue()}
+        {SENTIMENT_MAP[info.getValue()]}
       </Badge>
     ),
     footer: (info) => info.column.id,
@@ -78,7 +88,7 @@ export const userColumnDefs: ColumnDef<ITableRow, any>[] = [
 
 interface ITaskTableProps {
   data: any;
-  paginationData: IPaginationData;
+  paginationData: IPaginationData | undefined;
 }
 
 const TaskTable: FC<ITaskTableProps> = ({ data, paginationData }) => {
@@ -175,10 +185,10 @@ const TaskTable: FC<ITaskTableProps> = ({ data, paginationData }) => {
         </Box>
         <Box mt={4}>
           <TablePagination
-            pageSize={paginationData.perPage}
+            pageSize={paginationData?.perPage ?? 10}
             pageOptions={[5, 10, 15, 20]}
-            pageIndex={paginationData.currentPage}
-            pageCount={paginationData.total}
+            pageIndex={paginationData?.currentPage ?? 1}
+            pageCount={paginationData?.total ?? 0}
             nextPage={table.nextPage}
             previousPage={table.previousPage}
             gotoPage={table.setPageIndex}

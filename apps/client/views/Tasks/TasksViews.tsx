@@ -44,7 +44,7 @@ const TaskViews = () => {
           </Box>
         )}
         {parsedTasks.length > 0 && (
-          <TaskTable paginationData={tasks.meta} data={parsedTasks} />
+          <TaskTable paginationData={tasks?.meta} data={parsedTasks} />
         )}
       </Card>
     </Box>
