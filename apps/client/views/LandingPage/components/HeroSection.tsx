@@ -1,10 +1,15 @@
 import { Text, Box, Button, Flex, Heading } from "@chakra-ui/react";
 import Image from "next/image";
+import { useRouter } from "next/router";
 import HeroImage from "@client/public/images/hero-image.png";
 import { TextGradient, CircleGradient } from "@client/shared/components/atoms";
 import SquishyButton from "@client/shared/components/molecules/SquishButton/SquishButton";
 
 const HeroSection = () => {
+  const router = useRouter();
+  const handleOnClickHero = () => {
+    router.push("/dashboard");
+  };
   return (
     <Flex
       justifyContent="center"
@@ -25,7 +30,7 @@ const HeroSection = () => {
         right="5%"
         transform="translate(-10%, -50%)"
       >
-        <CircleGradient  size={300} />
+        <CircleGradient size={300} />
       </Box>
 
       {/* Content */}
@@ -49,7 +54,11 @@ const HeroSection = () => {
           data-driven success
         </Text>
         <Box display="flex" mt={5} justifyContent="center">
-          <SquishyButton colorScheme="primary" size="lg">
+          <SquishyButton
+            onClick={handleOnClickHero}
+            colorScheme="primary"
+            size="lg"
+          >
             Get early acceess, and let Gooby loose!
           </SquishyButton>
         </Box>

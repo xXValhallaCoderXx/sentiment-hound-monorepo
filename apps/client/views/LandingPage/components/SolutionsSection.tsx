@@ -36,14 +36,19 @@ const SolutionsSection = () => {
           Experience the power of our sentiment analysis product today and
           revolutionize your decision-making process.
         </Text>
-        <Flex gap={2} p={4} flexGrow={1} justifyContent="space-between" mt={5}>
-          <Box flexBasis="55%">
-            <Heading color="black.500">Powerful Suite Of Tools</Heading>
-            <Text>
-              Cost-effective, reliable sentiment analysis. Unleash the potential
-              of AI-driven data analysis and gain a deeper understanding of
-              customers.
-            </Text>
+
+        <Heading color="black.500">Powerful Suite Of Tools</Heading>
+        <Text>
+          Cost-effective, reliable sentiment analysis. Unleash the potential of
+          AI-driven data analysis and gain a deeper understanding of customers.
+        </Text>
+        <Box
+          display="flex"
+          flexDirection="row"
+          backgroundColor="RED"
+          height="500px"
+        >
+          <Box flexBasis="1/2">
             {cardOptions.map((card, index) => (
               <CardSelectable
                 index={index}
@@ -54,10 +59,11 @@ const SolutionsSection = () => {
                 onSelect={() => handleSelect(index)}
               />
             ))}
+          </Box>
+          <Box flexBasis="1/2">
             <ImageSwitcher images={images} currentIndex={selectedOption} />
           </Box>
-          <Box flexBasis="45%"></Box>
-        </Flex>
+        </Box>
       </Box>
     </Box>
   );
