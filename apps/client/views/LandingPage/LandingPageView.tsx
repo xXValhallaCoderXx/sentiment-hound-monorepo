@@ -1,16 +1,21 @@
 import { Box } from "@chakra-ui/react";
-import HeroSection from "./components/HeroSection";
-import SolutionsSection from "./components/SolutionsSection";
-import FeaturesSection from "./components/FeatureSection/FeaturesSection";
-import TryProductSection from "./components/TryProductSection";
+
+import {
+  FooterSection,
+  FeatureSection,
+  SolutionSection,
+  HeroSection,
+  TryProductSection,
+} from "./components";
 
 const LandingPageView = () => {
   return (
     <Box>
       <HeroSection />
-      <SolutionsSection />
-      <FeaturesSection />
+      <SolutionSection />
+      <FeatureSection />
       <TryProductSection />
+      <FooterSection />
     </Box>
   );
 };

@@ -1,5 +1,5 @@
 import { FC } from "react";
-import { Box } from "@chakra-ui/react";
+import { Box, TextProps } from "@chakra-ui/react";
 
 type ITextSize = "sm" | "md" | "lg" | "xl" | "2xl";
 type ITextColor = "primary" | "secondary" | "tertiary";
@@ -18,13 +18,12 @@ const fontSizeMapping: Record<ITextSize, string> = {
   "2xl": "6xl",
 };
 
-const GradientText: FC<IGradientTextProps> = ({ children, size, color }) => {
-  const fontSize = fontSizeMapping[size];
+const GradientText: FC<TextProps> = ({ children, ...rest }) => {
   return (
     <Box
       as="span"
       fontWeight="bold"
-      fontSize={fontSize}
+      {...rest}
       backgroundClip="text"
       bgGradient="linear(to-l, #2D2D2D, #D13639)"
       color="transparent"

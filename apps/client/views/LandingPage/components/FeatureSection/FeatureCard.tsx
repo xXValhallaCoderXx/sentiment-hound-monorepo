@@ -1,21 +1,56 @@
-import { FC } from "react";
-import { Card, Heading, Text } from "@chakra-ui/react";
+import { FC, ReactElement } from "react";
+import {
+  Box,
+  Button,
+  Container,
+  Flex,
+  Heading,
+  Icon,
+  Stack,
+  Text,
+  useColorModeValue,
+} from "@chakra-ui/react";
 
-interface IFeatureCardProps {
-  title: string;
+interface ICardProps {
+  heading: string;
   description: string;
+  icon: ReactElement;
+  href: string;
 }
 
-const FeatureCard: FC<IFeatureCardProps> = ({ title, description }) => {
+const FeatureCard: FC<ICardProps> = ({ heading, description, icon, href }) => {
   return (
-    <Card p={4} maxWidth={300}>
-      <Heading size="md" textAlign="center">
-        {title}
-      </Heading>
-      <Text size="sm" mt={2} textAlign="center">
-        {description}
-      </Text>
-    </Card>
+    <Box
+      maxW={{ base: "full", md: "275px" }}
+      w={"full"}
+      borderWidth="1px"
+      borderRadius="lg"
+      overflow="hidden"
+      p={5}
+    >
+      <Stack align={"start"} spacing={2}>
+        <Flex
+          w={16}
+          h={16}
+          align={"center"}
+          justify={"center"}
+          color={"white"}
+          rounded={"full"}
+          bg={useColorModeValue("gray.100", "gray.700")}
+        >
+          {icon}
+        </Flex>
+        <Box mt={2}>
+          <Heading size="md">{heading}</Heading>
+          <Text mt={1} fontSize={"sm"}>
+            {description}
+          </Text>
+        </Box>
+        <Button variant={"link"} colorScheme={"blue"} size={"sm"}>
+          Learn more
+        </Button>
+      </Stack>
+    </Box>
   );
 };
 
