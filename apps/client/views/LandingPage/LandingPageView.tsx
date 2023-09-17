@@ -3,7 +3,7 @@ import { Box } from "@chakra-ui/react";
 import {
   FooterSection,
   FeatureSection,
-  SolutionSection,
+  SolutionSectionNew,
   HeroSection,
   TryProductSection,
 } from "./components";
@@ -12,7 +12,7 @@ const LandingPageView = () => {
   return (
     <Box>
       <HeroSection />
-      <SolutionSection />
+      <SolutionSectionNew />
       <FeatureSection />
       <TryProductSection />
       <FooterSection />
