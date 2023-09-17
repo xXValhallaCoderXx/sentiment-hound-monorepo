@@ -14,15 +14,15 @@ import {
   useBreakpointValue,
   useDisclosure,
 } from "@chakra-ui/react";
-import Link from "next/link";
-import { ButtonLink } from "../../molecules/ButtonLink";
 import {
   FaChevronDown,
   FaChevronRight,
   FaHamburger,
   FaStop,
 } from "react-icons/fa";
+
 import Image from "next/image";
+import Link from "next/link";
 import MainLogoIcon from "@client/public/logos/main-logo.png";
 
 export default function WithSubnavigation() {
@@ -53,12 +53,21 @@ export default function WithSubnavigation() {
             aria-label={"Toggle Navigation"}
           />
         </Flex>
-        <Flex flex={{ base: 1 }} justify={{ base: "center", md: "start" }}>
-          <Image src={MainLogoIcon} alt="main-logo" height={30} width={30} />
-
-          <Flex display={{ base: "none", md: "flex" }} ml={10}>
+        <Flex
+          flex={{ base: 1 }}
+          justify={{ base: "center", md: "start" }}
+          alignItems="center"
+        >
+          <Image src={MainLogoIcon} alt="main-logo" height={30} />
+          <Text sx={{ pl: 4 }}>
+            <Text as="span" color="primary.500" fontWeight={600}>
+              Sentiment
+            </Text>{" "}
+            Hound
+          </Text>
+          {/* <Flex display={{ base: "none", md: "flex" }} ml={10}>
             <DesktopNav />
-          </Flex>
+          </Flex> */}
         </Flex>
 
         <Stack
@@ -67,24 +76,29 @@ export default function WithSubnavigation() {
           direction={"row"}
           spacing={6}
         >
-          <ButtonLink href="/auth/sign-in" color="primary" size="sm">
+          <Button
+            as={Link}
+            fontSize={"sm"}
+            fontWeight={400}
+            variant={"link"}
+            href={"/auth/sign-in"}
+          >
             Sign In
-          </ButtonLink>
-          {/* <Link href="/auth/sign-in" passHref>
-            <Button
-              as={"a"}
-              display={{ base: "none", md: "inline-flex" }}
-              fontSize={"sm"}
-              fontWeight={600}
-              color={"white"}
-              bg={"primary"}
-              _hover={{
-                bg: "red.300",
-              }}
-            >
-              Sign In
-            </Button>
-          </Link> */}
+          </Button>
+          <Button
+            as={Link}
+            display={{ base: "none", md: "inline-flex" }}
+            fontSize={"sm"}
+            fontWeight={600}
+            color={"white"}
+            bg={"primary.400"}
+            href={"/auth/sign-up"}
+            _hover={{
+              bg: "primary.300",
+            }}
+          >
+            Sign Up
+          </Button>
         </Stack>
       </Flex>
 

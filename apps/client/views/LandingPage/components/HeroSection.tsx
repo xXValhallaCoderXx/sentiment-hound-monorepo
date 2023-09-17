@@ -8,7 +8,7 @@ import SquishyButton from "@client/shared/components/molecules/SquishButton/Squi
 const HeroSection = () => {
   const router = useRouter();
   const handleOnClickHero = () => {
-    router.push("/dashboard");
+    router.push("/auth/sign-in");
   };
   return (
     <Container maxW={"5xl"}>
