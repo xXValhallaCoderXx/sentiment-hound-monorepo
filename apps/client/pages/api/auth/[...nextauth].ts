@@ -1,24 +1,22 @@
-import { getServerSession, type NextAuthOptions } from "next-auth";
-import { prisma } from "./prisma";
-import { redirect } from "next/navigation";
-
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
+import { PrismaClient } from "@prisma/client";
+import NextAuth from "next-auth/next";
 import GoogleProvider from "next-auth/providers/google";
 import EmailProvider from "next-auth/providers/email";
 
-export const authConfig: NextAuthOptions = {
+const prisma = new PrismaClient();
+
+export const authConfig: any = {
   adapter: PrismaAdapter(prisma) as any,
-  // Secret for Next-auth, without this JWT encryption/decryption won't work
-  secret: process.env.NEXTAUTH_SECRET,
   session: {
     strategy: "jwt",
   },
-  pages: {
-    signIn: "/auth/signin",
-    signOut: "/auth/signout",
-    error: "/auth/error", // Error code passed in query string as ?error=
-    verifyRequest: "/auth/verify",
-  },
+  //   pages: {
+  //     signIn: "/auth/sign-in",
+  //     signOut: "/auth/sign-out",
+  //     error: "/auth/error", // Error code passed in query string as ?error=
+  //     verifyRequest: "/auth/verify",
+  //   },
   providers: [
     EmailProvider({
       server: {
@@ -47,7 +45,4 @@ export const authConfig: NextAuthOptions = {
   ],
 };
 
-export const loginIsRequiredServer = async () => {
-  const session = await getServerSession(authConfig);
-  if (!session) return redirect("/");
-};
+export default NextAuth(authConfig);
