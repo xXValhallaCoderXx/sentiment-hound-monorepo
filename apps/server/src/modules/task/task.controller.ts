@@ -33,4 +33,9 @@ export class TaskController {
   getTask(@Param('id') taskId: string): any {
     return this.taskService.getTask({ id: taskId });
   }
+
+  @Get('/hello')
+  helloWorld(): any {
+    return { status: 'okay' };
+  }
 }
