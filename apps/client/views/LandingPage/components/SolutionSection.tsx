@@ -24,7 +24,7 @@ const SolutionsSection = () => {
       display="flex"
       flexDirection="column"
       alignItems="center"
-      backgroundColor="#EBEEF2"
+    
       pb={8}
     >
       <Box mt={8} sx={{ width: 800 }}>

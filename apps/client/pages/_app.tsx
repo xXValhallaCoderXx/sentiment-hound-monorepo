@@ -2,7 +2,6 @@ import type { ReactElement, ReactNode } from "react";
 import type { NextPage } from "next";
 import { Provider } from "react-redux";
 import type { AppProps } from "next/app";
-import { UserProvider } from "@auth0/nextjs-auth0/client";
 import { ChakraProvider } from "@chakra-ui/react";
 import { extendTheme } from "@chakra-ui/react";
 import { wrapper } from "@client/shared/lib/store";
@@ -133,7 +132,7 @@ export default function App({ Component, ...rest }: AppPropsWithLayout) {
   return (
     <Provider store={store}>
       <ChakraProvider theme={theme}>
-        <UserProvider>{getLayout(<Component {...pageProps} />)} </UserProvider>
+        {getLayout(<Component {...pageProps} />)}
       </ChakraProvider>
     </Provider>
   );
