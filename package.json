@@ -4,12 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "pnpm run --parallel dev",
-    "prisma:push": "pnpm dlx prisma db push",
-    "prisma:generate": "pnpm dlx prisma generate"
-  },
-  "prisma": {
-    "schema": "./apps/server/prisma/schema.prisma"
+    "dev": "pnpm run --parallel dev"
   },
   "keywords": [],
   "author": "",
