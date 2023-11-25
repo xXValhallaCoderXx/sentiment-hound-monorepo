@@ -1,11 +1,12 @@
-import Head from 'next/head'
-import Image from 'next/image'
-import { Inter } from 'next/font/google'
-import styles from '@client/styles/Home.module.css'
+import Head from "next/head";
+import Image from "next/image";
+import { Inter } from "next/font/google";
+import styles from "@client/styles/Home.module.css";
 
-const inter = Inter({ subsets: ['latin'] })
+const inter = Inter({ subsets: ["latin"] });
 
-export default function Home() {
+export default function Home({data}: any) {
+  console.log("DATA: ", data?.data)
   return (
     <>
       <Head>
@@ -26,7 +27,7 @@ export default function Home() {
               target="_blank"
               rel="noopener noreferrer"
             >
-              By{' '}
+              By{" "}
               <Image
                 src="/vercel.svg"
                 alt="Vercel Logo"
@@ -39,7 +40,8 @@ export default function Home() {
           </div>
         </div>
 
-        <div className={styles.center}>
+        <div style={{display: "flex", flexDirection: "column", gap: 10}} className={styles.center}>
+          <h3>{data?.data}</h3>
           <Image
             className={styles.logo}
             src="/next.svg"
@@ -110,5 +112,12 @@ export default function Home() {
         </div>
       </main>
     </>
-  )
+  );
 }
+
+export const getServerSideProps = async () => {
+  const res = await fetch(`${process.env.SERVER_URL}`);
+  const response = await res.json();
+
+  return { props: { data: response } };
+};
