@@ -3,13 +3,12 @@ import Image from "next/image";
 import styles from "@client/styles/Home.module.css";
 import { useAppSelector } from "@client/shared/redux-hooks";
 import { useGetTestQuery } from "@client/shared/slices/test-api";
+import { getMessage } from "shared-prisma";
 
-
-export default function Home({data}: any) {
-
+export default function Home({ data }: any) {
   const count = useAppSelector((state) => state.test);
   const { data: data2 } = useGetTestQuery();
-
+  console.log("WHAT IS THIS: ", getMessage());
   return (
     <>
       <Head>
@@ -18,10 +17,11 @@ export default function Home({data}: any) {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main >
-   
-
-        <div style={{display: "flex", flexDirection: "column", gap: 10}} className={styles.center}>
+      <main>
+        <div
+          style={{ display: "flex", flexDirection: "column", gap: 10 }}
+          className={styles.center}
+        >
           <h3>Server: {data?.data}</h3>
           <h3>Dynamic: {data2?.data}</h3>
           <Image
@@ -33,8 +33,6 @@ export default function Home({data}: any) {
             priority
           />
         </div>
-
- 
       </main>
     </>
   );
@@ -43,6 +41,6 @@ export default function Home({data}: any) {
 export const getServerSideProps = async () => {
   const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}`);
   const response = await res.json();
-  console.log("SERVER SIDE: ", response)
+  console.log("SERVER SIDE: ", response);
   return { props: { data: response } };
 };

@@ -1,0 +1,9 @@
+{
+  "name": "shared-prisma",
+  "description": "",
+  "main": "index.ts",
+  "private": true,
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
