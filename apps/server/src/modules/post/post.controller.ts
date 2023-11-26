@@ -15,7 +15,7 @@ export class PostController {
   @Get("test")
   getTask(): any {
     return {
-      message: "Hello World from sss"
+      message: "Hello World from LATEST"
     }
   }
   

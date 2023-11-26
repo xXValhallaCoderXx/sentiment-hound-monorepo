@@ -3,7 +3,7 @@ import { authOptions } from "../api/auth/[...nextauth]";
 import { useSession } from "next-auth/react";
 
 export default function Page() {
-  return <div>adasdasd</div>;
+  return <div>THIS IS THE DASHBOARD PAGE - PROTECTED</div>;
 }
 
 export async function getServerSideProps(context: any) {
