@@ -22,7 +22,7 @@ export default function Home({ data }: any) {
           style={{ display: "flex", flexDirection: "column", gap: 10 }}
           className={styles.center}
         >
-          <h3>Server: {data?.message}</h3>
+          <h3>ServeSSr: {data?.message}</h3>
           <h3>Dynamic: {isLoading ? "LOADING" : testResponse?.length}</h3>
           <Image
             className={styles.logo}
