@@ -5,10 +5,13 @@
   "main": "index.js",
   "scripts": {
     "dev": "pnpm run --parallel dev",
-    "build:server": "pnpm --filter server build",
-    "build:client": "pnpm --filter client build",
+    "build:server": "pnpm prebuild && pnpm --filter server build",
+    "build:client": "pnpm prebuild && pnpm --filter client build",
     "start:server": "pnpm --filter server start:prod",
-    "start:client": "pnpm --filter client start"
+    "start:client": "pnpm --filter client start",
+    "prisma:generate": "pnpm --filter shared-prisma generate",
+    "prisma:db:push": "pnpm --filter shared-prisma db:push",
+    "prebuild": "pnpm prisma:generate && pnpm prisma:db:push"
   },
   "keywords": [],
   "author": "",
