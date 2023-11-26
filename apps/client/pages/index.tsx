@@ -3,11 +3,12 @@ import Image from "next/image";
 import styles from "@client/styles/Home.module.css";
 import { useAppSelector } from "@client/shared/redux-hooks";
 import { useGetTestQuery } from "@client/shared/slices/test-api";
-import { PrismaClient } from "@packages/shared-prisma/prisma/prisma-client";
+import { useSession, signIn, signOut } from "next-auth/react"
 
 export default function Home({ data }: any) {
   const count = useAppSelector((state) => state.test);
   const { data: testResponse, isLoading } = useGetTestQuery();
+  const { data: session } = useSession()
 
   return (
     <>
@@ -24,6 +25,7 @@ export default function Home({ data }: any) {
         >
           <h3>ServeSSr: {data?.message}</h3>
           <h3>Dynamic: {isLoading ? "LOADING" : testResponse?.length}</h3>
+          {session ? <div>logged</div> : <div>not logged</div>}
           <Image
             className={styles.logo}
             src="/next.svg"

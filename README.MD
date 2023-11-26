@@ -19,3 +19,5 @@ pnpm add @nestjs/config --filter=server
 
 // Add package dep to another package
 pnpm add shared-prisma --filter server --workspace
+
+http://localhost:3000/api/auth/signin
