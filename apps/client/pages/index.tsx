@@ -4,12 +4,13 @@ import Image from "next/image";
 import styles from "@client/styles/Home.module.css";
 import { useAppSelector } from "@client/shared/redux-hooks";
 import { useGetTestQuery } from "@client/shared/slices/test-api";
-import { useSession, signIn, signOut } from "next-auth/react"
+import { useSession, signIn, signOut } from "next-auth/react";
+import { Button, Text } from "@chakra-ui/react";
 
 export default function Home({ data }: any) {
   const count = useAppSelector((state) => state.test);
   const { data: testResponse, isLoading } = useGetTestQuery();
-  const { data: session } = useSession()
+  const { data: session } = useSession();
 
   return (
     <>
@@ -27,26 +28,20 @@ export default function Home({ data }: any) {
           <h3>ServeSSr: {data?.message}</h3>
           <h3>Dynamic: {isLoading ? "LOADING" : testResponse?.length}</h3>
           {session ? <div>logged</div> : <div>not logged</div>}
-          <Image
-            className={styles.logo}
-            src="/next.svg"
-            alt="Next.js Logo"
-            width={180}
-            height={37}
-            priority
-          />
+          <Button size="sm" colorScheme="primary" onClick={() => signIn()}>
+            Sign in
+          </Button>
+          <Text fontSize="xs" color="primary.500">
+            Admin
+          </Text>
         </div>
       </main>
     </>
   );
 }
 
-
-
 export const getServerSideProps = async () => {
-  console.log("PUBLIC URL: ", process.env.NEXT_PUBLIC_API_URL);
   const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/post/test`);
   const response = await res.json();
-  console.log("SERVER SIDE: ", response);
   return { props: { data: response } };
 };
