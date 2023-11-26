@@ -7,7 +7,7 @@ import { PrismaClient } from "@packages/shared-prisma/prisma/prisma-client";
 
 export default function Home({ data }: any) {
   const count = useAppSelector((state) => state.test);
-  const { data: data2 } = useGetTestQuery();
+  const { data: testResponse, isLoading } = useGetTestQuery();
 
   return (
     <>
@@ -22,8 +22,8 @@ export default function Home({ data }: any) {
           style={{ display: "flex", flexDirection: "column", gap: 10 }}
           className={styles.center}
         >
-          <h3>Server: {data?.data}</h3>
-          <h3>Dynamic: {data2?.data}</h3>
+          <h3>Server: {data?.message}</h3>
+          <h3>Dynamic: {isLoading ? "LOADING" : testResponse?.length}</h3>
           <Image
             className={styles.logo}
             src="/next.svg"
@@ -39,7 +39,8 @@ export default function Home({ data }: any) {
 }
 
 export const getServerSideProps = async () => {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}`);
+  console.log("PUBLIC URL: ", process.env.NEXT_PUBLIC_API_URL);
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/post/test`);
   const response = await res.json();
   console.log("SERVER SIDE: ", response);
   return { props: { data: response } };
