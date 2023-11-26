@@ -34,9 +34,6 @@ importers:
       react-redux:
         specifier: ^8.1.3
         version: 8.1.3(@types/react-dom@18.2.17)(@types/react@18.2.38)(react-dom@18.2.0)(react@18.2.0)(redux@4.2.1)
-      shared-prisma:
-        specifier: workspace:^
-        version: link:../packages/shared-prisma
     devDependencies:
       '@types/node':
         specifier: ^20

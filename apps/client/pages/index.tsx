@@ -1,4 +1,5 @@
 import Head from "next/head";
+
 import Image from "next/image";
 import styles from "@client/styles/Home.module.css";
 import { useAppSelector } from "@client/shared/redux-hooks";
@@ -39,6 +40,8 @@ export default function Home({ data }: any) {
     </>
   );
 }
+
+
 
 export const getServerSideProps = async () => {
   console.log("PUBLIC URL: ", process.env.NEXT_PUBLIC_API_URL);
