@@ -3,12 +3,12 @@ import Image from "next/image";
 import styles from "@client/styles/Home.module.css";
 import { useAppSelector } from "@client/shared/redux-hooks";
 import { useGetTestQuery } from "@client/shared/slices/test-api";
-import { getMessage } from "shared-prisma";
+import { PrismaClient } from "@packages/shared-prisma/prisma/prisma-client";
 
 export default function Home({ data }: any) {
   const count = useAppSelector((state) => state.test);
   const { data: data2 } = useGetTestQuery();
-  console.log("WHAT IS THIS: ", getMessage());
+
   return (
     <>
       <Head>

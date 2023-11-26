@@ -15,3 +15,7 @@ pnpm dlx create-next-app@latest
 
 // Add it only to server
 pnpm add @nestjs/config --filter=server
+
+
+// Add package dep to another package
+pnpm add shared-prisma --filter server --workspace
