@@ -7,7 +7,7 @@
   "author": "",
   "license": "ISC",
   "scripts": {
-    "db:push": "dotenv -e ../../../.env prisma db push",
+    "db:push": "dotenv -e ../../../.env prisma db push --force-reset",
     "generate": "prisma generate"
   },
   "dependencies": {
