@@ -11,7 +11,7 @@
     "start:client": "pnpm --filter client start",
     "prisma:generate": "pnpm --filter shared-prisma generate",
     "prisma:db:push": "pnpm --filter shared-prisma db:push",
-    "prebuild": "pnpm prisma:generate && pnpm prisma:db:push"
+    "prebuild": "pnpm prisma:db:push && pnpm prisma:generate"
   },
   "keywords": [],
   "author": "",
