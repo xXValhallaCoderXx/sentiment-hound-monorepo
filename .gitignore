@@ -4,3 +4,4 @@ build
 .env
 prisma-client
 postgres-data
+.vscode
