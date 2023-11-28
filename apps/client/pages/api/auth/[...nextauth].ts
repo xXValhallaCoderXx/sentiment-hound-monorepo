@@ -1,4 +1,4 @@
-import NextAuth, { User, Session, SessionStrategy  } from "next-auth";
+import NextAuth, { User, Session, SessionStrategy } from "next-auth";
 import { JWT } from "next-auth/jwt";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import GoogleProvider from "next-auth/providers/google";
@@ -18,8 +18,15 @@ export const authOptions = {
     }),
   ],
   session: {
-    strategy: 'jwt' as SessionStrategy,
-   },
+    strategy: "jwt" as SessionStrategy,
+  },
+  pages: {
+    signIn: "/auth/sign-in",
+    signOut: "/auth/sign-out",
+    error: "/auth/error", // Error code passed in query string as ?error=
+    verifyRequest: "/auth/verify-request", // (used for check email message)
+    newUser: "/auth/new-user", // New users will be directed here on first sign in (leave the property out if not of interest)
+  },
 };
 
 export default NextAuth(authOptions);

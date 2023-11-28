@@ -1,0 +1,1 @@
+export {default as AuthNewUserView} from './AuthNewUserView'
