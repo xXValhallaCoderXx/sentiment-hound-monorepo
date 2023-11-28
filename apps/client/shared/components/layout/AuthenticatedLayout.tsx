@@ -1,11 +1,11 @@
-import { signOut } from "next-auth/react"
+
+import { AuthenticatedNavigationBar } from "../organisms/AuthenticatedNavigationBar";
 const AuthenticatedLayout = ({ children }: any) => {
     return (
       <>
-        <div>Header</div>
-        <button onClick={() => signOut()}>Sign out</button>
+        <AuthenticatedNavigationBar />
+
         <main>{children}</main>
-        <div>Footer</div>
       </>
     );
   };

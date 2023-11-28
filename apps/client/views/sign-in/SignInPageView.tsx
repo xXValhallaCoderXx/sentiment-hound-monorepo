@@ -15,7 +15,7 @@ const SignInPageView = ({
     const handleOnClickGoogleSignIn = () => {
 
         signIn(providers?.google.id, {
-            callbackUrl: `${process.env.NEXT_PUBLIC_APP_URL}/dashboard`,
+            callbackUrl: `${process.env.NEXT_PUBLIC_APP_URL}/auth/callback`,
           })
     }
   return (
