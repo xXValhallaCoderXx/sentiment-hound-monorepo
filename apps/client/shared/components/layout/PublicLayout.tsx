@@ -1,10 +1,11 @@
+import { PublicNavigationBar } from "../organisms/PublicNavigationBar";
+
 const PublicLayout = ({ children }: any) => {
   return (
-    <>
-      <div>Header</div>
+    <div style={{ height: "100%" }}>
+      <PublicNavigationBar />
       <main>{children}</main>
-      <div>Footer</div>
-    </>
+    </div>
   );
 };
 
