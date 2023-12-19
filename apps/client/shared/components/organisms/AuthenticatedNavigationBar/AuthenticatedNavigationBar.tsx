@@ -1,5 +1,6 @@
 import React from "react";
 import { useRouter } from "next/router";
+import { signOut } from "next-auth/react";
 import {
   IconButton,
   Avatar,
@@ -22,6 +23,10 @@ const AuthenticatedNavigationBar = () => {
 
   const onClickLink = (e: any) => {
     router.push(e.target.name);
+  };
+
+  const handleOnClickSignout = () => {
+    signOut();
   };
   return (
     <HStack spacing={{ base: "0", md: "6" }}>
@@ -70,7 +75,7 @@ const AuthenticatedNavigationBar = () => {
             </MenuItem>
 
             <MenuDivider />
-            <MenuItem>Sign out</MenuItem>
+            <MenuItem onClick={handleOnClickSignout}>Sign out</MenuItem>
           </MenuList>
         </Menu>
       </Flex>

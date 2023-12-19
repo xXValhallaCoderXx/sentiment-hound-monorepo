@@ -1,11 +1,12 @@
 /* eslint-disable react/no-unescaped-entities */
 import type { InferGetServerSidePropsType } from "next";
 import { signIn } from "next-auth/react";
+import NextImage from "next/image";
 import { getServerSideProps } from "@client/pages/auth/sign-in";
 import {
-    Box, Flex, Grid, Heading, Text, Image, FormControl, FormLabel, Input, Button, Link, useBreakpointValue
+    Box, Flex, Grid, Heading, Text, Image, FormControl, FormLabel, Input, Button, Link, useBreakpointValue,
   } from '@chakra-ui/react';
-  
+import MainLogoIcon from "@client/public/logos/main-logo.png";
 
 const SignInPageView = ({
   providers,
@@ -19,11 +20,14 @@ const SignInPageView = ({
           })
     }
   return (
-    <Grid id="sign-in-container" templateColumns={columnLayout} gap={6} h="calc(100vh - 100px)">
+    <Grid id="sign-in-container" templateColumns={columnLayout} gap={6} h="calc(100vh - 60px)">
     {/* Left Column */}
-    <Flex direction="column" justify="center" align="center" p={10}>
-      <Heading mb={4}>Welcome to AwesomeApp</Heading>
-      <Text fontSize="lg" mb={8}>Explore the endless possibilities.</Text>
+    <Flex direction="column"   bgColor="#F1F5F9" p={20}>
+        <Flex alignItems="center" gap={2}>
+       
+        <NextImage src={MainLogoIcon} alt="main-logo" height={80} />
+        <Heading fontWeight={400} >Sentiment Hound</Heading>
+        </Flex>
       <Image src="https://via.placeholder.com/400" alt="Abstract Art" boxSize="300px" />
     </Flex>
 
